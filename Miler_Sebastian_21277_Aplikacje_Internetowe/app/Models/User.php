@@ -19,8 +19,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'last_name',
         'email',
         'password',
+        'role_id',
     ];
 
     /**
@@ -44,5 +46,27 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+    public function specializations()
+    {
+        return $this->belongsToMany(Species::class, 'specializations');
+    }
+    public function cares() {
+        return $this->hasMany(Care::class);
+    }
+    public function hasRole($roleName)
+    {
+        return $this->role?->name === $roleName;
+    }
+    public function todaySchedule() {
+        return $this->cares()->where('care_date', now()->toDateString());
+    }
+    public function isEmployee()
+    {
+        return $this->role_id !== null; 
     }
 }
