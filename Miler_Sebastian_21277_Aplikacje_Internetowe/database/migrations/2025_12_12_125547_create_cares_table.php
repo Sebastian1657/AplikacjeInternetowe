@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('animal_id')->constrained()->onDelete('cascade');
             $table->date('care_date');
-            $table->enum('shift', ['1', '2', '3']);
+            $table->unsignedTinyInteger('shift');
             $table->timestamps();
         });
     }
