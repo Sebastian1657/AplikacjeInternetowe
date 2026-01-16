@@ -23,9 +23,6 @@ class AnimalFactory extends Factory
             'name' => $this->faker->firstName(),
             'sex' => $this->faker->randomElement(['Male', 'Female']),
             'birth_date' => $this->faker->dateTimeBetween('-15 years', '-1 month'),
-            'subspecies_id' => Subspecies::factory(), 
-            'enclosure_id' => Enclosure::factory(),
-            'diet_plan_id' => DietPlan::factory(),
         ];
     }
 }

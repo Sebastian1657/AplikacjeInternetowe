@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class DietPlan extends Model
 {
-    use HasFactory;
 
+    protected $table = 'diet_plans';
     protected $fillable = ['name', 'feeding_frequency', 'instructions'];
 
     public function animals()

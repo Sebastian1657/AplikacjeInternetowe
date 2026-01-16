@@ -88,9 +88,9 @@ class DatabaseSeeder extends Seeder
             'Banany' => 'kg',
         ];
 
+        $foods = [];
         foreach ($foodList as $type => $unit) {
-            $food = Food::factory()->create(['name' => $type, 'unit' => $unit]);
-            $foods[$type] = $food;
+            $foods[$type] = Food::factory()->create(['name' => $type, 'unit' => $unit]);
         }
 
         $diets = [
@@ -146,7 +146,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Dieta roślinna - standard',
                 'frequency' => '3x dziennie',
                 'ingredients' => [
-                    $foods['siano']->id => 40,
+                    $foods['Siano']->id => 40,
                     $foods['Marchew']->id => 10,
                     $foods['Jabłka']->id => 5,
                     $foods['Proso']->id => 8,
@@ -178,11 +178,22 @@ class DatabaseSeeder extends Seeder
                     $foods['Larwy mącznika']->id => 20,
                     $foods['Granulat dla ryb']->id => 40,
                 ]
-            ],
-            'piscivore'
-                    
-
+            ]
         ];
+
+        $dietModels = [];
+        foreach ($diets as $key => $config) {
+            $diet = DietPlan::create([
+                'name' => $config['name'],
+                'feeding_frequency' => $config['frequency']
+            ]);
+            foreach ($config['ingredients'] as $foodName => $amount) {
+                if(isset($foods[$foodName])) {
+                    $diet->foods()->attach($foods[$foodName]->id, ['amount' => $amount]);
+                }
+            }
+            $dietModels[$key] = $diet;
+        }
 
         $zooMap = [
             // OTWARTE
@@ -299,7 +310,7 @@ class DatabaseSeeder extends Seeder
         foreach ($zooMap as $config) {
             $enclosure = Enclosure::create($config['enclosure']);
             $species = Species::firstOrCreate(['name' => $config['species']]);
-            $dietPlan = $diets[$config['diet']];
+            $dietPlan = $dietModels[$config['diet']];
 
             foreach ($config['subspecies'] as $index => $subName) {
                 $latinName = $config['scientific_name'][$index] ?? 'Lorem ipsum';
@@ -321,13 +332,10 @@ class DatabaseSeeder extends Seeder
         }
         
         $allAnimals = Animal::all();
-        $allAnimals = Animal::all();
         
         Care::factory(60)->create([
             'user_id' => $employees->random()->id,
             'animal_id' => $allAnimals->random()->id,
         ]);
     }
-
-
 }
