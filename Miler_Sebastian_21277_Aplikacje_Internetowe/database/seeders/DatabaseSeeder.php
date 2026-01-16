@@ -92,7 +92,16 @@ class DatabaseSeeder extends Seeder
             $foods[$type] = $food;
         }
 
-        $diets = [];
+        $diets = [
+            'carnivore' => [
+                'name' => 'Dieta Mięsna',
+                'frequency' => '3x dziennie',
+                'ingredients' => [
+                    'Wołowina' => 20, 
+                    'Kurczak' => 2
+                ]
+            ],
+        ];
 
         $diets['carnivore'] = DietPlan::create(['name' => 'Dieta Mięsna', 'feeding_frequency' => '2x dziennie']);
         $diets['carnivore']->foods()->attach([$foods['Wołowina']->id, $foods['Kurczak']->id], ['amount' => 2000]);

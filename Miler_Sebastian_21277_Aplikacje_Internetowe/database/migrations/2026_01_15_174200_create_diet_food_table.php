@@ -15,11 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('diet_plan_id')->constrained('diet_plans')->onDelete('cascade');
             $table->foreignId('food_id')->constrained('food')->onDelete('cascade');
-            $table->integer('amount')->nullable();
+            $table->decimal('amount', 6, 2)->nullable();
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */
