@@ -49,7 +49,6 @@ class DatabaseSeeder extends Seeder
             'role_id' => 1,
             'password' => Hash::make('password'),
         ]);
-
         User::factory()->create([
             'name' => 'Jan',
             'last_name' => 'Manager',
@@ -57,7 +56,6 @@ class DatabaseSeeder extends Seeder
             'role_id' => 2,
             'password' => Hash::make('password'),
         ]);
-
         User::factory()->create([
             'name' => 'Krzysztof',
             'last_name' => 'Kierownik',
@@ -82,9 +80,12 @@ class DatabaseSeeder extends Seeder
             'Sałata' => 'szt',
             'Bambus pędy' => 'kg',
             'Proso' => 'g',
+            'Pszenica' => 'g',
             'Słonecznik' => 'g',
             'Orzechy' => 'g',
             'Larwy mącznika' => 'g',
+            'Granulat dla ryb' => 'g',
+            'Banany' => 'kg',
         ];
 
         foreach ($foodList as $type => $unit) {
@@ -94,106 +95,179 @@ class DatabaseSeeder extends Seeder
 
         $diets = [
             'carnivore' => [
-                'name' => 'Dieta Mięsna',
+                'name' => 'Dieta Mięsna - standard',
                 'frequency' => '3x dziennie',
                 'ingredients' => [
-                    'Wołowina' => 20, 
-                    'Kurczak' => 2
+                    $foods['Wołowina']->id => 20,
+                    $foods['Kurczak']->id => 2,
                 ]
             ],
+            'piscivore' => [
+                'name' => 'Dieta rybna - standard',
+                'frequency' => '2x dziennie',
+                'ingredients' => [
+                    $foods['Śledź']->id => 2,
+                    $foods['Makrela']->id => 2,
+                ]
+            ],
+            'elephants' => [
+                'name' => 'Dieta słoni',
+                'frequency' => 'Cały dzień',
+                'ingredients' => [
+                    $foods['Siano']->id => 70,
+                    $foods['Marchew']->id => 20,
+                    $foods['Jabłka']->id => 20,
+                ]
+            ],
+            'exotic_birds' => [
+                'name' => 'Dieta ptaków egzotycznych',
+                'frequency' => '3x dziennie',
+                'ingredients' => [
+                    $foods['Słonecznik']->id => 100,
+                    $foods['Orzechy']->id => 100,
+                    $foods['Jabłka']->id => 0.3,
+                ]
+            ],
+            'birds' => [
+                'name' => 'Dieta ptaków',
+                'frequency' => '2x dziennie',
+                'ingredients' => [
+                    $foods['Pszenica']->id => 200,
+                ]
+            ],
+            'bamboo' => [
+                'name' => 'Dieta bambusowa',
+                'frequency' => '1x dziennie',
+                'ingredients' => [
+                    $foods['Bambus pędy']->id => 40,
+                ]
+            ],
+            'herbivore' => [
+                'name' => 'Dieta roślinna - standard',
+                'frequency' => '3x dziennie',
+                'ingredients' => [
+                    $foods['siano']->id => 40,
+                    $foods['Marchew']->id => 10,
+                    $foods['Jabłka']->id => 5,
+                    $foods['Proso']->id => 8,
+                ]
+            ],
+            'monkey' => [
+                'name' => 'Dieta małp',
+                'frequency' => '3x dziennie',
+                'ingredients' => [
+                    $foods['Jabłka']->id => 0.5,
+                    $foods['Sałata']->id => 1,
+                    $foods['Banany']->id => 0.5,
+                    $foods['Marchew']->id => 1,
+                    $foods['Orzechy']->id => 0.5,
+                ]  
+            ],
+            'insectivore' => [
+                'name' => 'Dieta owadożerców',
+                'frequency' => '3x dziennie',
+                'ingredients' => [
+                    $foods['Larwy mącznika']->id => 20,
+                    $foods['Sałata']->id => 0.5,
+                ]
+            ],
+            'fish' => [
+                'name' => 'Dieta ryb',
+                'frequency' => '3x dziennie',
+                'ingredients' => [
+                    $foods['Larwy mącznika']->id => 20,
+                    $foods['Granulat dla ryb']->id => 40,
+                ]
+            ],
+            'piscivore'
+                    
+
         ];
-
-        $diets['carnivore'] = DietPlan::create(['name' => 'Dieta Mięsna', 'feeding_frequency' => '2x dziennie']);
-        $diets['carnivore']->foods()->attach([$foods['Wołowina']->id, $foods['Kurczak']->id], ['amount' => 2000]);
-
-        $diets['piscivore'] = DietPlan::create(['name' => 'Dieta Rybna', 'feeding_frequency' => '2x dziennie']);
-        $diets['piscivore']->foods()->attach([$foods['Śledź']->id, $foods['Makrela']->id], ['amount' => 1000]);
-
-        $diets['herbivore'] = DietPlan::create(['name' => 'Dieta Roślinna', 'feeding_frequency' => 'Cały dzień']);
-        $diets['herbivore']->foods()->attach([$foods['Siano']->id, $foods['Marchew']->id, $foods['Jabłka']->id], ['amount' => 5000]);
-
-        $diets['bamboo'] = DietPlan::create(['name' => 'Bambus', 'feeding_frequency' => '1x dziennie']);
-        $diets['bamboo']->foods()->attach([$foods['Bambus pędy']->id], ['amount' => 10000]);
-
-        $diets['bird_seeds'] = DietPlan::create(['name' => 'Dieta Ziarnista', 'feeding_frequency' => '2x dziennie']);
-        $diets['bird_seeds']->foods()->attach([$foods['Proso']->id, $foods['Słonecznik']->id], ['amount' => 200]);
-
-        $diets['bird_meat'] = DietPlan::create(['name' => 'Ptaki Drapieżne', 'feeding_frequency' => '1x dziennie']);
-        $diets['bird_meat']->foods()->attach([$foods['Mysz mrożona']->id], ['amount' => 300]);
 
         $zooMap = [
             // OTWARTE
             [
-                'enclosure' => ['name' => 'Bambusowy Las', 'type' => 'open_air', 'capacity' => 5],
+                'enclosure' => ['name' => 'Bambusowy Las', 'type' => 'open_air', 'capacity' => 6],
                 'species' => 'Niedźwiedziowate',
                 'subspecies' => ['Panda Wielka'],
+                'scientific_name' => ['Ailuropoda melanoleuca'],
                 'diet' => 'bamboo'
             ],
             [
                 'enclosure' => ['name' => 'Sawanna Słoni', 'type' => 'open_air', 'capacity' => 6],
                 'species' => 'Słoniowate',
                 'subspecies' => ['Słoń Afrykański'],
-                'diet' => 'herbivore'
+                'scientific_name' => ['Loxodonta africana'],
+                'diet' => 'elephants'
             ],
             [
-                'enclosure' => ['name' => 'Wysokie Drzewa', 'type' => 'open_air', 'capacity' => 8],
+                'enclosure' => ['name' => 'Wybieg żyraf', 'type' => 'open_air', 'capacity' => 6],
                 'species' => 'Żyrafowate',
                 'subspecies' => ['Żyrafa Rothschilda'],
+                'scientific_name' => ['Giraffa camelopardalis rothschildi'],
                 'diet' => 'herbivore'
             ],
             [
-                'enclosure' => ['name' => 'Gawra Niedźwiedzia', 'type' => 'open_air', 'capacity' => 4],
-                'species' => 'Niedźwiedziowate', // Ten sam gatunek co Panda, ale inny podgatunek i dieta!
+                'enclosure' => ['name' => 'Wybieg niedźwiedzi', 'type' => 'open_air', 'capacity' => 6],
+                'species' => 'Niedźwiedziowate',
                 'subspecies' => ['Niedźwiedź Brunatny'],
-                'diet' => 'carnivore' // Niedźwiedzie są wszystkożerne, ale tu uprośćmy do mięsnej/mix
+                'scientific_name' => ['Ursus arctos'],
+                'diet' => 'carnivore'
             ],
 
             // ZAMKNIĘTE
             [
                 'enclosure' => ['name' => 'Małpi Gaj', 'type' => 'indoor_cage', 'capacity' => 15],
                 'species' => 'Naczelne',
-                'subspecies' => ['Makak Japoński', 'Muflon Śródziemnomorski'], // Muflon to kopytne, ale user chciał razem
-                'diet' => 'herbivore' // Uproszczenie: owoce/warzywa
+                'subspecies' => ['Kapucynka czubata', 'Sajmiri wiewiórcza'],
+                'scientific_name' => ['Sapajus apella', 'Saimiri sciureus'],
+                'diet' => 'monkey'
             ],
             [
-                'enclosure' => ['name' => 'Pustynna Nora', 'type' => 'indoor_cage', 'capacity' => 20],
+                'enclosure' => ['name' => 'Pustynia', 'type' => 'indoor_cage', 'capacity' => 20],
                 'species' => 'Mangustowate',
                 'subspecies' => ['Surykatka'],
-                'diet' => 'carnivore' // Robaki/mięso
+                'scientific_name' => ['Suricata suricatta'],
+                'diet' => 'insectivore'
             ],
 
             // WOLIERY
             [
                 'enclosure' => ['name' => 'Papugarnia', 'type' => 'aviary', 'capacity' => 30],
                 'species' => 'Papugowate',
-                'subspecies' => ['Ara Ararauna', 'Żako', 'Kakadu'],
-                'diet' => 'bird_seeds'
+                'subspecies' => ['Ara ararauna', 'Żako większa', 'Kakadu palmowa'],
+                'scientific_name' => ['Ara ararauna', 'Psittacus erithacus', 'Probosciger aterrimus'],
+                'diet' => 'exotic_birds'
             ],
             [
                 'enclosure' => ['name' => 'Gołębnik Egzotyczny', 'type' => 'aviary', 'capacity' => 40],
                 'species' => 'Gołębiowate',
-                'subspecies' => ['Koroniec Plamisty', 'Gołąb Nikobarski'],
-                'diet' => 'bird_seeds'
+                'subspecies' => ['Koroniec Plamoczuby', 'Gołąb Nikobarski'],
+                'scientific_name' => ['Goura victoria', 'Caloenas nicobarica'],
+                'diet' => 'birds'
             ],
             [
-                'enclosure' => ['name' => 'Dżungla Tukanów', 'type' => 'aviary', 'capacity' => 10],
+                'enclosure' => ['name' => 'Dżungla Tukanów', 'type' => 'aviary', 'capacity' => 12],
                 'species' => 'Tukanowate',
                 'subspecies' => ['Tukan Wielki'],
-                'diet' => 'herbivore' 
+                'scientific_name' => ['Ramphastos toco'],
+                'diet' => 'exotic_birds' 
             ],
 
             // AKWARIUM
             [
-                'enclosure' => ['name' => 'Oceanarium Drapieżne', 'type' => 'aquarium', 'capacity' => 5],
+                'enclosure' => ['name' => 'Oceanarium ryb drapieżnych', 'type' => 'aquarium', 'capacity' => 8],
                 'species' => 'Ryby Chrzęstnoszkieletowe',
-                'subspecies' => ['Żarłacz Czarnopłetwy', 'Murena'],
+                'subspecies' => ['Żarłacz Czarnopłetwy', 'Murena brunatna'],
+                'scientific_name' => ['Carcharhinus limbatus', 'Gymnothorax vicinus'],
                 'diet' => 'piscivore'
             ],
             [
-                'enclosure' => ['name' => 'Rafa Koralowa', 'type' => 'aquarium', 'capacity' => 50],
+                'enclosure' => ['name' => 'Rafa Koralowa', 'type' => 'aquarium', 'capacity' => 40],
                 'species' => 'Ryby Kostnoszkieletowe',
                 'subspecies' => ['Błazenek', 'Pokolec Królewski'],
-                'diet' => 'herbivore'
+                'scientific_name' => ['Amphiprion percula', 'Paracanthurus hepatus'],
+                'diet' => 'fish'
             ],
 
             // ZAMKNIĘTE Z BASENEM
@@ -201,20 +275,23 @@ class DatabaseSeeder extends Seeder
                 'enclosure' => ['name' => 'Basen Fok', 'type' => 'pool_enclosure', 'capacity' => 8],
                 'species' => 'Fokowate',
                 'subspecies' => ['Foka Szara'],
+                'scientific_name' => ['Halichoerus grypus'],
                 'diet' => 'piscivore'
             ],
             [
                 'enclosure' => ['name' => 'Zatoka Nerp', 'type' => 'pool_enclosure', 'capacity' => 6],
                 'species' => 'Fokowate',
                 'subspecies' => ['Nerpa Bajkalska'],
+                'scientific_name' => ['Pusa sibirica'],
                 'diet' => 'piscivore'
             ],
 
             // PINGWINY
             [
-                'enclosure' => ['name' => 'Lodowa Kraina', 'type' => 'cooled_enclosure', 'capacity' => 20],
+                'enclosure' => ['name' => 'Wybieg lodowy', 'type' => 'cooled_enclosure', 'capacity' => 20],
                 'species' => 'Pingwiny',
                 'subspecies' => ['Pingwin Cesarski', 'Pingwin Adeli'],
+                'scientific_name' => ['Aptenodytes forsteri', 'Pygoscelis adeliae'],
                 'diet' => 'piscivore'
             ],
         ];
@@ -224,15 +301,16 @@ class DatabaseSeeder extends Seeder
             $species = Species::firstOrCreate(['name' => $config['species']]);
             $dietPlan = $diets[$config['diet']];
 
-            foreach ($config['subspecies'] as $subName) {
+            foreach ($config['subspecies'] as $index => $subName) {
+                $latinName = $config['scientific_name'][$index] ?? 'Lorem ipsum';
                 $subspecies = Subspecies::firstOrCreate([
                     'species_id' => $species->id,
                     'common_name' => $subName
                 ], [
-                    'scientific_name' => 'Latin Name Placeholder'
+                    'scientific_name' => $latinName,
                 ]);
 
-                $count = rand(2, 5);
+                $count = rand(2, $enclosure->capacity);
                 
                 Animal::factory($count)->create([
                     'subspecies_id' => $subspecies->id,
