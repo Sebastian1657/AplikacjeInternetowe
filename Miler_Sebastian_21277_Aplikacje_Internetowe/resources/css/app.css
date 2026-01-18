@@ -8,4 +8,10 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --color-zoo-bg: #f0fdf4;
+    --color-zoo-menu: #16a34a;
+    --color-zoo-menu-hover: #15803d;
+    --color-zoo-footer: #052e16;
+    --color-zoo-text: #1b1b18;
 }
