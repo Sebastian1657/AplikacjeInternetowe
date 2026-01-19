@@ -44,7 +44,7 @@
         </div>
 
         <nav class="flex-1 px-4 py-6 space-y-2">
-            <a href="#" class="flex items-center gap-3 px-4 py-3 hover:bg-green-600/50 rounded-lg text-green-100 transition-colors group">
+            <a href="{{ route('tickets.index') }}" class="flex items-center gap-3 px-4 py-3 hover:bg-green-600/50 rounded-lg text-green-100 transition-colors group {{ request()->routeIs('tickets.index') ? 'bg-green-700/50 text-white' : '' }}"}">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 group-hover:scale-110 transition-transform">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v4.086c0 .705.328 1.374.887 1.81.559.435.887 1.105.887 1.81v4.086c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-4.086c0-.705.328-1.374.887-1.81.559-.435.887-1.105.887-1.81V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
                 </svg>
@@ -58,34 +58,20 @@
                 Mapa ZOO
             </a>
 
-            <a href="#" class="flex items-center gap-3 px-4 py-3 hover:bg-green-600/50 rounded-lg text-green-100 transition-colors group">
+            <a href="{{ route('residents') }}" class="flex items-center gap-3 px-4 py-3 hover:bg-green-600/50 rounded-lg text-green-100 transition-colors group {{ request()->routeIs('residents') ? 'bg-green-700/50 text-white' : '' }}">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 group-hover:scale-110 transition-transform">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.182 15.182a4.5 4.5 0 0 1-6.364 0M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Z" />
                 </svg>
                 Nasi Mieszkańcy
             </a>
 
-            <a href="#" class="flex items-center gap-3 px-4 py-3 hover:bg-green-600/50 rounded-lg text-green-100 transition-colors group">
+            <a href="{{ route('contact') }}" class="flex items-center gap-3 px-4 py-3 hover:bg-green-600/50 rounded-lg text-green-100 transition-colors group {{ request()->routeIs('contact') ? 'bg-green-700/50 text-white' : '' }}">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 group-hover:scale-110 transition-transform">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
                 </svg>
                 Kontakt
             </a>
         </nav>
-
-        <div class="p-4 border-t border-green-600/50 bg-green-800/30">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-                    </svg>
-                </div>
-                <div class="flex flex-col">
-                    <span class="text-sm font-semibold">Użytkownik</span>
-                    <span class="text-xs text-green-200">Wyloguj (placeholder)</span>
-                </div>
-            </div>
-        </div>
     </aside>
 
     <main class="grow w-full">
