@@ -12,7 +12,7 @@
 </head>
 <body class="bg-zoo-bg text-zoo-text font-sans antialiased flex flex-col min-h-screen">
 
-    <header class="bg-white shadow-sm sticky top-0 z-30 h-16 flex items-center px-4 justify-between border-b border-green-100">
+    <header class="bg-white shadow-sm sticky top-0 z-100 h-16 flex items-center px-4 justify-between border-b border-green-100">
         <div class="flex items-center gap-4">
             <button id="menu-toggle" class="p-2 rounded-md hover:bg-green-50 text-zoo-menu cursor-pointer transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-8">

@@ -2,33 +2,25 @@
 
 @section('content')
 @php
-    // KONFIGURACJA POZYCJI NA MAPIE
-    // Mapujemy nazwy z DatabaseSeeder.php na koordynaty % na mapie (Top, Left, Width, Height)
-    // Układ: Góra - Sawanna/Las | Środek - Woda | Dół - Budynki/Woliery
     $mapPositions = [
-        // STREFA PÓŁNOCNA (DUŻE WYBIEGI ZEWNĘTRZNE)
-        'Sawanna Słoni' =>          ['t' => 5,  'l' => 5,  'w' => 25, 'h' => 25],
-        'Wybieg żyraf' =>           ['t' => 5,  'l' => 32, 'w' => 18, 'h' => 25],
-        'Bambusowy Las' =>          ['t' => 5,  'l' => 55, 'w' => 20, 'h' => 20], // Pandy
-        'Wybieg niedźwiedzi' =>     ['t' => 5,  'l' => 77, 'w' => 18, 'h' => 20],
+        'Sawanna Słoni' =>          ['t' => 5,  'l' => 2,  'w' => 25, 'h' => 25],
+        'Wybieg żyraf' =>           ['t' => 5,  'l' => 30, 'w' => 20, 'h' => 25],
+        'Bambusowy Las' =>          ['t' => 5,  'l' => 58, 'w' => 20, 'h' => 20],
+        'Wybieg niedźwiedzi' =>     ['t' => 5,  'l' => 80, 'w' => 18, 'h' => 20],
 
-        // STREFA WODNA (ŚRODEK - PRZY JEZIORZE)
-        'Basen Fok' =>              ['t' => 35, 'l' => 35, 'w' => 12, 'h' => 12],
-        'Zatoka Nerp' =>            ['t' => 35, 'l' => 50, 'w' => 12, 'h' => 12],
+        'Basen Fok' =>              ['t' => 37, 'l' => 25, 'w' => 18, 'h' => 23],
+        'Zatoka Nerp' =>            ['t' => 37, 'l' => 47, 'w' => 24, 'h' => 14],
         
-        // STREFA WSCHODNIA (ZIMNA/WODNA)
-        'Wybieg lodowy' =>          ['t' => 30, 'l' => 75, 'w' => 20, 'h' => 18], // Pingwiny
+        'Wybieg lodowy' =>          ['t' => 30, 'l' => 75, 'w' => 20, 'h' => 18],
         'Oceanarium ryb drapieżnych'=> ['t' => 52, 'l' => 75, 'w' => 20, 'h' => 15],
-        'Rafa Koralowa' =>          ['t' => 70, 'l' => 75, 'w' => 20, 'h' => 15],
+        'Rafa Koralowa' =>          ['t' => 70, 'l' => 80, 'w' => 16, 'h' => 25],
 
-        // STREFA POŁUDNIOWO-ZACHODNIA (WOLIERY I BUDYNKI)
-        'Małpi Gaj' =>              ['t' => 40, 'l' => 5,  'w' => 18, 'h' => 18],
-        'Pustynia' =>               ['t' => 62, 'l' => 5,  'w' => 18, 'h' => 15],
-        
-        // ALEJKA PTAKÓW (DÓŁ ŚRODEK)
-        'Papugarnia' =>             ['t' => 60, 'l' => 30, 'w' => 12, 'h' => 12],
-        'Dżungla Tukanów' =>        ['t' => 60, 'l' => 45, 'w' => 12, 'h' => 12],
-        'Gołębnik Egzotyczny' =>    ['t' => 60, 'l' => 60, 'w' => 12, 'h' => 12],
+        'Małpi Gaj' =>              ['t' => 35, 'l' => 2,  'w' => 18, 'h' => 30],
+        'Pustynia' =>               ['t' => 70, 'l' => 2,  'w' => 13, 'h' => 28],
+
+        'Papugarnia' =>             ['t' => 75, 'l' => 20, 'w' => 18, 'h' => 20],
+        'Dżungla Tukanów' =>        ['t' => 56, 'l' => 46, 'w' => 24, 'h' => 14],
+        'Gołębnik Egzotyczny' =>    ['t' => 74, 'l' => 60, 'w' => 15, 'h' => 22],
     ];
 @endphp
 
@@ -65,66 +57,58 @@
 
             @foreach($enclosures as $enclosure)
                 @php
-                    // Pobierz pozycję z konfiguracji lub ustaw domyślną (dla bezpieczeństwa)
                     $pos = $mapPositions[$enclosure->name] ?? ['t' => 80, 'l' => 45, 'w' => 10, 'h' => 10];
                     
-                    // Kolory w zależności od typu
                     $colors = match($enclosure->type) {
-                        'aquarium', 'pool_enclosure', 'cooled_enclosure' => 'bg-blue-100 border-blue-400 text-blue-800',
+                        'aquarium' => 'bg-blue-500 border-blue-900 text-blue-900',
+                        'cooled_enclosure' => 'bg-blue-300 border-blue-700 text-light-blue-700',
+                        'pool_enclosure' => 'bg-blue-100 border-blue-400 text-blue-800',
                         'aviary' => 'bg-yellow-100 border-yellow-400 text-yellow-800',
                         'indoor_cage' => 'bg-orange-100 border-orange-400 text-orange-800',
-                        default => 'bg-green-200 border-green-600 text-green-900', // open_air
+                        default => 'bg-green-200 border-green-600 text-green-900',
                     };
 
-                    // Dane do modala
                     $uniqueSpecies = $enclosure->animals->unique('subspecies_id');
                     $modalData = $enclosure->animals->groupBy('subspecies_id')->map(function($group) {
                         $first = $group->first();
                         return [
                             'common_name' => $first->subspecies->common_name,
+                            'specie_name' => $first->subspecies->species->name,
                             'scientific_name' => $first->subspecies->scientific_name,
                             'names' => $group->pluck('name')->toArray(),
-                            'image' => asset('photos/' . Str::slug($first->subspecies->common_name, '_') . '.png')
+                            'image' => asset('photos/' . Str::slug($first->subspecies->common_name, '_') . '.jpg')
                         ];
                     });
                 @endphp
 
-                <div onclick="openModal('{{ $enclosure->name }}', {{ json_encode($modalData) }})"
-                     class="absolute rounded-xl border-2 shadow-md cursor-pointer hover:scale-105 hover:shadow-xl hover:z-50 transition-all duration-300 flex flex-col items-center justify-center p-2 text-center group {{ $colors }}"
+                <div onclick="openModal(this)"
+                     data-name="{{ $enclosure->name }}"
+                     data-animals="{{ json_encode($modalData) }}"
+                     class="absolute rounded-xl border-2 shadow-md cursor-pointer hover:scale-105 hover:shadow-xl hover:z-40 transition-all duration-300 flex flex-col items-center justify-center p-1 text-center group {{ $colors }}"
                      style="top: {{ $pos['t'] }}%; left: {{ $pos['l'] }}%; width: {{ $pos['w'] }}%; height: {{ $pos['h'] }}%;">
                     
-                    <span class="font-bold text-xs md:text-sm lg:text-base leading-tight">
+                    <span class="font-bold text-xs md:text-sm lg:text-base leading-tight select-none">
                         {{ $enclosure->name }}
                     </span>
 
-                    <div class="mt-1 md:mt-2 flex -space-x-2 overflow-hidden py-1">
+                    <div class="pr-1 pl-1 md:mt-1 flex -space-x-2 overflow-hidden py-1">
                         @foreach($uniqueSpecies->take(3) as $animal)
-                            <img src="{{ asset('photos/' . Str::slug($animal->subspecies->common_name, '_') . '.png') }}" 
-                                 class="inline-block h-6 w-6 md:h-8 md:w-8 rounded-full ring-2 ring-white object-cover bg-white"
+                            <img src="{{ asset('photos/' . Str::slug($animal->subspecies->common_name, '_') . '.jpg') }}" 
+                                 class="inline-block h-6 w-6 md:h-14 md:w-14 rounded-full ring-2 ring-white object-cover bg-white"
                                  title="{{ $animal->subspecies->common_name }}"
-                                 onerror="this.style.display='none'">
+                                 onerror="this.onerror=null; this.src='https://placehold.co/100x100/e2e8f0/16a34a?text=?';">
                         @endforeach
+                        
                         @if($uniqueSpecies->count() > 3)
-                            <span class="flex items-center justify-center h-6 w-6 md:h-8 md:w-8 rounded-full ring-2 ring-white bg-gray-200 text-[10px] font-bold text-gray-600">
+                            <span class="flex items-center justify-center h-6 w-6 md:h-14 md:w-14 rounded-full ring-2 ring-white bg-gray-200 text-[10px] font-bold text-gray-600 select-none">
                                 +{{ $uniqueSpecies->count() - 3 }}
                             </span>
                         @endif
-                    </div>
-
-                    <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-[10px] px-2 py-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
-                        {{ $enclosure->type }}
                     </div>
                 </div>
             @endforeach
 
         </div>
-    </div>
-    
-    <div class="mt-6 flex flex-wrap justify-center gap-6 text-sm text-gray-600">
-        <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-green-200 border border-green-600"></span> Wybieg Otwarty</div>
-        <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-blue-100 border border-blue-400"></span> Woda / Lód</div>
-        <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-yellow-100 border border-yellow-400"></span> Ptaszarnia</div>
-        <div class="flex items-center gap-2"><span class="w-4 h-4 rounded bg-orange-100 border border-orange-400"></span> Pawilon Zamknięty</div>
     </div>
 </div>
 
@@ -149,5 +133,53 @@
 </div>
 
 <script>
-    // Skrypt modala (bez zmian logicznych, tylko obsługa)
-    const modal = document
+    const modal = document.getElementById('animalModal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalContent = document.getElementById('modal-content');
+
+    function openModal(element) {
+        const enclosureName = element.getAttribute('data-name');
+        const animalsData = JSON.parse(element.getAttribute('data-animals'));
+
+        modalTitle.textContent = enclosureName;
+        modalContent.innerHTML = '';
+        const speciesGroups = Object.values(animalsData);
+
+        if (speciesGroups.length === 0) {
+            modalContent.innerHTML = '<p class="text-center text-gray-500 py-4">Ten wybieg jest obecnie pusty.</p>';
+        } else {
+            speciesGroups.forEach(group => {
+                const section = document.createElement('div');
+                section.className = 'mb-6 last:mb-0';
+                
+                const header = `
+                    <div class="flex items-center gap-4 mb-3 pb-2 border-b border-gray-100">
+                        <img src="${group.image}" class="w-16 h-16 rounded-lg object-cover bg-gray-100 shadow-sm" onerror="this.src='https://placehold.co/100x100/e2e8f0/16a34a?text=?'">
+                        <div>
+                            <h4 class="text-lg font-bold text-gray-800 leading-tight">${group.common_name}</h4>
+                            <span class="text-base text-gray-600 font-serif">${group.specie_name}</span></br>
+                            <span class="text-sm text-gray-500 italic font-serif">${group.scientific_name}</span>
+                        </div>
+                    </div>
+                `;
+                let badges = '<div class="flex flex-wrap gap-2">';
+                group.names.forEach(name => {
+                    badges += `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">${name}</span>`;
+                });
+                badges += '</div>';
+                section.innerHTML = header + badges;
+                modalContent.appendChild(section);
+            });
+        }
+        modal.classList.remove('hidden');
+    }
+
+    function closeModal() {
+        modal.classList.add('hidden');
+    }
+    
+    document.addEventListener('keydown', function(event) {
+        if (event.key === "Escape") closeModal();
+    });
+</script>
+@endsection

@@ -16,7 +16,7 @@
         
         <img src="https://images.unsplash.com/photo-1546182990-dffeafbe841d?q=80&w=2059&auto=format&fit=crop" 
              alt="Zdjęcie przedstawiające lwa" 
-             class="absolute inset-0 w-full h-full object-cover opacity-60">
+             class="absolute inset-0 w-full h-full object-cover opacity-60">    `
         <div class="absolute inset-0 bg-linear-to-t from-zoo-footer/90 to-transparent"></div>
     </div>
 
