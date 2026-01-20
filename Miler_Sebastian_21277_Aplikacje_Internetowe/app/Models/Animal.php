@@ -32,8 +32,5 @@ class Animal extends Model
     {
         return $this->belongsTo(DietPlan::class);
     }
-    public function cares()
-    {
-        return $this->hasMany(Care::class);
-    }
+
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\ResidentController;
 use App\Http\Controllers\MapController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ScheduleController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -24,3 +25,9 @@ Route::get('/mieszkancy', [ResidentController::class, 'index'])->name('residents
 Route::get('/kontakt', [HomeController::class, 'contact'])->name('contact');
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.authenticate');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/grafik', [ScheduleController::class, 'index'])->name('schedule.index');
+});
