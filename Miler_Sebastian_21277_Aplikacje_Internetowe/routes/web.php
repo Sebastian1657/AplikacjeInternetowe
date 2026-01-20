@@ -1,108 +1,26 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use App\Models\Animal;
-use App\Models\Enclosure;
-use App\Models\Species;
-use App\Models\Subspecies;
-use Carbon\Carbon;
-use Barryvdh\DomPDF\Facade\Pdf;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ResidentController;
+use App\Http\Controllers\MapController;
+use App\Http\Controllers\TicketController;
+use App\Http\Controllers\AuthController;
 
-Route::get('/', function () {
-    $animalsCount = Animal::count();
-    $speciesCount = Species::count();
-    
-    $foundedDate = Carbon::create(2006, 7, 3);
-    $yearsOfOperation = (int) $foundedDate->diffInYears(now());
 
-    $videoPath = public_path('videos');
-    $randomVideo = 'seal.mp4';
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-    if (File::exists($videoPath)) {
-        $files = File::files($videoPath);
-        
-        $videos = array_filter($files, function ($file) {
-            return in_array(strtolower($file->getExtension()), ['mp4', 'webm', 'mov']);
-        });
-
-        if (!empty($videos)) {
-            $randomFile = $videos[array_rand($videos)];
-            $randomVideo = $randomFile->getFilename();
-        }
-    }
-
-    return view('welcome', compact('animalsCount', 'speciesCount', 'yearsOfOperation', 'randomVideo'));
+Route::prefix('bilety')->name('tickets.')->group(function () {
+    Route::get('/', [TicketController::class, 'index'])->name('index');
+    Route::post('/platnosc', [TicketController::class, 'checkout'])->name('checkout');
+    Route::post('/finalizacja', [TicketController::class, 'finalize'])->name('finalize');
 });
 
-Route::get('/bilety', function () {
-    $ticketTypes = [
-        ['id' => 'normal', 'name' => 'Bilet Normalny', 'price' => 60],
-        ['id' => 'student', 'name' => 'Ulgowy (Uczeń / Student)', 'price' => 40],
-        ['id' => 'child', 'name' => 'Dziecko do 3 r.ż.', 'price' => 0],
-        ['id' => 'senior', 'name' => 'Emeryt', 'price' => 30],
-        ['id' => 'disabled', 'name' => 'Os. Niepełnosprawna', 'price' => 30],
-        ['id' => 'group', 'name' => 'Grupa zorganizowana (min. 10 osób)', 'price' => 25],
-    ];
+Route::get('/mapa', [MapController::class, 'index'])->name('map');
+Route::get('/api/enclosure/{id}', [MapController::class, 'getEnclosure'])->name('api.enclosure');
 
-    return view('tickets.index', compact('ticketTypes'));
-})->name('tickets.index');
+Route::get('/mieszkancy', [ResidentController::class, 'index'])->name('residents');
 
-Route::post('/bilety/platnosc', function (Request $request) {
-    $data = $request->all();
-    $groupTickets = intval($data['tickets']['group'] ?? 0);
-    if ($groupTickets > 0 && $groupTickets < 10) {
-        abort(400, 'Błąd: Grupa zorganizowana musi liczyć minimum 10 osób.');
-    }
-    return view('tickets.payment', compact('data'));
-})->name('tickets.checkout');
+Route::get('/kontakt', [HomeController::class, 'contact'])->name('contact');
 
-Route::post('/bilety/finalizacja', function (Request $request) {
-    $data = $request->all();
-    $pdf = Pdf::loadView('pdf.ticket', compact('data'));
-    return $pdf->download('Bilet_ZOO_' . $data['visit_date'] . '.pdf');
-})->name('tickets.finalize');
-
-Route::get('/mapa', function () {
-    $enclosures = Enclosure::with(['animals.subspecies.species'])->get();
-    
-    return view('map', compact('enclosures'));
-})->name('map');
-
-Route::get('/api/enclosure/{id}', function ($id) {
-    $enclosure = Enclosure::with('animals.subspecies.species')->findOrFail($id);
-
-    $modalData = $enclosure->animals->groupBy('subspecies_id')->map(function($group) {
-        $first = $group->first();
-        return [
-            'common_name' => $first->subspecies->common_name,
-            'specie_name' => $first->subspecies->species->name,
-            'scientific_name' => $first->subspecies->scientific_name,
-            'names' => $group->pluck('name')->toArray(),
-            'image' => asset('photos/' . Str::slug($first->subspecies->common_name, '_') . '.jpg')
-        ];
-    })->values();
-
-    return response()->json([
-        'name' => $enclosure->name,
-        'animals' => $modalData
-    ]);
-});
-
-Route::get('/mieszkancy', function () {
-    $subspecies = Subspecies::withCount('animals')
-        ->orderBy('common_name')
-        ->paginate(10);
-
-    return view('residents', compact('subspecies'));
-})->name('residents');
-
-Route::get('/kontakt', function () {
-    return view('contact');
-})->name('contact');
-
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
-
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');

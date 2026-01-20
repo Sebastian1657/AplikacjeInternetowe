@@ -22,7 +22,9 @@
             </button>
             
             <div class="text-2xl font-bold tracking-wider text-zoo-menu">
-                🦁 ZOO <span class="text-gray-400 text-sm font-normal">System</span>
+                <a href="/">
+                    🦁 ZOO <span class="text-gray-400 text-sm font-normal">System</span>
+                </a>
             </div>
         </div>
 
