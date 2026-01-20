@@ -20,10 +20,10 @@
         </p>
 
         <div class="mt-8 flex gap-4">
-            <a href="#" class="px-8 py-3 bg-zoo-menu hover:bg-green-500 text-white font-semibold rounded-full transition-all shadow-lg hover:scale-105">
+            <a href="{{ route('tickets.index') }}" class="px-8 py-3 bg-zoo-menu hover:bg-green-500 text-white font-semibold rounded-full transition-all shadow-lg hover:scale-105">
                 Kup Bilet
             </a>
-            <a href="#" class="px-8 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/30 font-semibold rounded-full transition-all hover:scale-105">
+            <a href="{{ route('map') }}" class="px-8 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/30 font-semibold rounded-full transition-all hover:scale-105">
                 Zobacz Mapę
             </a>
         </div>

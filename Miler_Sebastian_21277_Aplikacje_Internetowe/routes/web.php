@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\Animal;
+use App\Models\Enclosure;
 use App\Models\Species;
 use App\Models\Subspecies;
 use Carbon\Carbon;
@@ -63,6 +64,32 @@ Route::post('/bilety/finalizacja', function (Request $request) {
     return $pdf->download('Bilet_ZOO_' . $data['visit_date'] . '.pdf');
 })->name('tickets.finalize');
 
+Route::get('/mapa', function () {
+    $enclosures = Enclosure::with(['animals.subspecies.species'])->get();
+    
+    return view('map', compact('enclosures'));
+})->name('map');
+
+Route::get('/api/enclosure/{id}', function ($id) {
+    $enclosure = Enclosure::with('animals.subspecies.species')->findOrFail($id);
+
+    $modalData = $enclosure->animals->groupBy('subspecies_id')->map(function($group) {
+        $first = $group->first();
+        return [
+            'common_name' => $first->subspecies->common_name,
+            'specie_name' => $first->subspecies->species->name,
+            'scientific_name' => $first->subspecies->scientific_name,
+            'names' => $group->pluck('name')->toArray(),
+            'image' => asset('photos/' . Str::slug($first->subspecies->common_name, '_') . '.jpg')
+        ];
+    })->values();
+
+    return response()->json([
+        'name' => $enclosure->name,
+        'animals' => $modalData
+    ]);
+});
+
 Route::get('/mieszkancy', function () {
     $subspecies = Subspecies::withCount('animals')
         ->orderBy('common_name')
@@ -74,3 +101,8 @@ Route::get('/mieszkancy', function () {
 Route::get('/kontakt', function () {
     return view('contact');
 })->name('contact');
+
+Route::get('/login', function () {
+    return view('auth.login');
+})->name('login');
+
