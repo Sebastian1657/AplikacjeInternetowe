@@ -47,6 +47,9 @@
             @for ($day = 1; $day <= $daysInMonth; $day++)
                 @php
                     $dayCares = $cares->get($day);
+                    if ($dayCares) {
+                        $dayCares = $dayCares->sortBy('shift');
+                    }
                     $isToday = $day == now()->day && $date->isCurrentMonth();
                     $hasWork = $dayCares && $dayCares->count() > 0;
                 @endphp
