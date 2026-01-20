@@ -82,10 +82,9 @@
                 @endphp
 
                 <div onclick="openModal(this)"
-                     data-name="{{ $enclosure->name }}"
-                     data-animals="{{ json_encode($modalData) }}"
-                     class="absolute rounded-xl border-2 shadow-md cursor-pointer hover:scale-105 hover:shadow-xl hover:z-40 transition-all duration-300 flex flex-col items-center justify-center p-1 text-center group {{ $colors }}"
-                     style="top: {{ $pos['t'] }}%; left: {{ $pos['l'] }}%; width: {{ $pos['w'] }}%; height: {{ $pos['h'] }}%;">
+                    data-id="{{ $enclosure->id }}"
+                    class="absolute rounded-xl border-2 shadow-md cursor-pointer hover:scale-105 hover:shadow-xl hover:z-40 transition-transform duration-300 will-change-transform flex flex-col items-center justify-center p-1 text-center group {{ $colors }}"
+                    style="top: {{ $pos['t'] }}%; left: {{ $pos['l'] }}%; width: {{ $pos['w'] }}%; height: {{ $pos['h'] }}%;">
                     
                     <span class="font-bold text-xs md:text-sm lg:text-base leading-tight select-none">
                         {{ $enclosure->name }}
@@ -94,9 +93,10 @@
                     <div class="pr-1 pl-1 md:mt-1 flex -space-x-2 overflow-hidden py-1">
                         @foreach($uniqueSpecies->take(3) as $animal)
                             <img src="{{ asset('photos/' . Str::slug($animal->subspecies->common_name, '_') . '.jpg') }}" 
-                                 class="inline-block h-6 w-6 md:h-14 md:w-14 rounded-full ring-2 ring-white object-cover bg-white"
-                                 title="{{ $animal->subspecies->common_name }}"
-                                 onerror="this.onerror=null; this.src='https://placehold.co/100x100/e2e8f0/16a34a?text=?';">
+                                decoding="async"
+                                class="inline-block h-6 w-6 md:h-14 md:w-14 rounded-full ring-2 ring-white object-cover bg-white"
+                                title="{{ $animal->subspecies->common_name }}"
+                                onerror="this.onerror=null; this.src='https://placehold.co/100x100/e2e8f0/16a34a?text=?';">
                         @endforeach
                         
                         @if($uniqueSpecies->count() > 3)
@@ -119,13 +119,13 @@
             <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
                 <div class="bg-zoo-menu px-6 py-4 flex justify-between items-center">
                     <h3 class="text-xl font-bold text-white" id="modal-title">Nazwa Wybiegu</h3>
-                    <button type="button" onclick="closeModal()" class="text-green-100 hover:text-white">
+                    <button type="button" onclick="closeModal()" class="text-green-100 hover:text-white cursor-pointer" aria-label="Zamknij szczegóły">
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
                 </div>
                 <div class="px-6 py-6 max-h-[70vh] overflow-y-auto" id="modal-content"></div>
                 <div class="bg-gray-50 px-6 py-3 flex justify-end">
-                    <button type="button" onclick="closeModal()" class="inline-flex w-full justify-center rounded-lg bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">Zamknij</button>
+                    <button type="button" onclick="closeModal()" class="inline-flex w-full justify-center rounded-lg bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto cursor-pointer">Zamknij</button>
                 </div>
             </div>
         </div>
@@ -137,41 +137,53 @@
     const modalTitle = document.getElementById('modal-title');
     const modalContent = document.getElementById('modal-content');
 
-    function openModal(element) {
-        const enclosureName = element.getAttribute('data-name');
-        const animalsData = JSON.parse(element.getAttribute('data-animals'));
-
-        modalTitle.textContent = enclosureName;
-        modalContent.innerHTML = '';
-        const speciesGroups = Object.values(animalsData);
-
-        if (speciesGroups.length === 0) {
-            modalContent.innerHTML = '<p class="text-center text-gray-500 py-4">Ten wybieg jest obecnie pusty.</p>';
-        } else {
-            speciesGroups.forEach(group => {
-                const section = document.createElement('div');
-                section.className = 'mb-6 last:mb-0';
-                
-                const header = `
-                    <div class="flex items-center gap-4 mb-3 pb-2 border-b border-gray-100">
-                        <img src="${group.image}" class="w-16 h-16 rounded-lg object-cover bg-gray-100 shadow-sm" onerror="this.src='https://placehold.co/100x100/e2e8f0/16a34a?text=?'">
-                        <div>
-                            <h4 class="text-lg font-bold text-gray-800 leading-tight">${group.common_name}</h4>
-                            <span class="text-base text-gray-600 font-serif">${group.specie_name}</span></br>
-                            <span class="text-sm text-gray-500 italic font-serif">${group.scientific_name}</span>
-                        </div>
-                    </div>
-                `;
-                let badges = '<div class="flex flex-wrap gap-2">';
-                group.names.forEach(name => {
-                    badges += `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">${name}</span>`;
-                });
-                badges += '</div>';
-                section.innerHTML = header + badges;
-                modalContent.appendChild(section);
-            });
-        }
+    async function openModal(element) {
+        const enclosureId = element.getAttribute('data-id');
+        
+        modalTitle.textContent = "Ładowanie...";
+        modalContent.innerHTML = '<div class="text-center py-10"><div class="animate-spin h-8 w-8 border-4 border-green-500 rounded-full border-t-transparent mx-auto"></div></div>';
         modal.classList.remove('hidden');
+
+        try {
+            const response = await fetch(`/api/enclosure/${enclosureId}`);
+            if (!response.ok) throw new Error('Network response was not ok');
+            const data = await response.json();
+
+            modalTitle.textContent = data.name;
+            modalContent.innerHTML = '';
+
+            if (data.animals.length === 0) {
+                modalContent.innerHTML = '<p class="text-center text-gray-500 py-4">Ten wybieg jest obecnie pusty.</p>';
+            } else {
+                data.animals.forEach(group => { 
+                    const section = document.createElement('div');
+                    section.className = 'mb-6 last:mb-0';
+                    
+                    const header = `
+                        <div class="flex items-center gap-4 mb-3 pb-2 border-b border-gray-100">
+                            <img src="${group.image}" class="w-16 h-16 rounded-lg object-cover bg-gray-100 shadow-sm" onerror="this.src='https://placehold.co/100x100/e2e8f0/16a34a?text=?'">
+                            <div>
+                                <h4 class="text-lg font-bold text-gray-800 leading-tight">${group.common_name}</h4>
+                                <span class="text-base text-gray-600 font-serif">${group.specie_name}</span></br>
+                                <span class="text-sm text-gray-500 italic font-serif">${group.scientific_name}</span>
+                            </div>
+                        </div>
+                    `;
+                    let badges = '<div class="flex flex-wrap gap-2">';
+                    if (group.names && Array.isArray(group.names)) {
+                        group.names.forEach(name => {
+                            badges += `<span class="inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20">${name}</span>`;
+                        });
+                    }
+                    badges += '</div>';
+                    section.innerHTML = header + badges;
+                    modalContent.appendChild(section);
+                });
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            modalContent.innerHTML = '<p class="text-center text-red-500">Wystąpił błąd podczas ładowania danych.</p>';
+        }
     }
 
     function closeModal() {

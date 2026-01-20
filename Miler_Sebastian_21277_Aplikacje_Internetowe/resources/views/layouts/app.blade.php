@@ -11,6 +11,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-zoo-bg text-zoo-text font-sans antialiased flex flex-col min-h-screen">
+    <x-preloader />
 
     <header class="bg-white shadow-sm sticky top-0 z-100 h-16 flex items-center px-4 justify-between border-b border-green-100">
         <div class="flex items-center gap-4">
