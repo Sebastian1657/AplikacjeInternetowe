@@ -55,7 +55,7 @@
                         @foreach($ticketTypes as $ticket)
                         <tr class="hover:bg-green-50/50 transition-colors group">
                             <td class="py-4 pr-4">
-                                <div class="font-semibold text-gray-800">{{ $ticket['name'] }}</div>
+                                <div class="font-semibold text-gray-800" id="ticket-label-{{ $ticket['id'] }}">{{ $ticket['name'] }}</div>
                             </td>
                             <td class="py-4 text-right text-gray-600 font-mono">
                                 {{ $ticket['price'] }} zł
@@ -63,6 +63,7 @@
                             <td class="py-4 text-right">
                                 <input type="number" 
                                        name="tickets[{{ $ticket['id'] }}]" 
+                                       aria-labelledby="ticket-label-{{ $ticket['id'] }}"
                                        min="0" 
                                        value="0" 
                                        data-price="{{ $ticket['price'] }}"

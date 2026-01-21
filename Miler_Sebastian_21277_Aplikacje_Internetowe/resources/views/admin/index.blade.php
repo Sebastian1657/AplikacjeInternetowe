@@ -36,22 +36,20 @@
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                        {{-- ZMIANA: Iterujemy po polach (fields) zdefiniowanych w modelu --}}
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                         @foreach($config['fields'] as $field => $options)
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                 {{ $options['label'] }}
                             </th>
                         @endforeach
-                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Akcje</th>
+                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Akcje</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @forelse($data as $row)
                     <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-gray-500 text-sm">#{{ $row->id }}</td>
+                        <th scope="row" class="px-6 py-4 whitespace-nowrap text-gray-500 text-sm">#{{ $row->id }}</th>
                         
-                        {{-- ZMIANA: Wyświetlanie danych na podstawie typu pola w konfiguracji --}}
                         @foreach($config['fields'] as $field => $options)
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                 @if($options['type'] === 'relation')
@@ -80,10 +78,10 @@
                         @endforeach
 
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <a href="{{ route('admin.table.edit', [$tableName, $row->id]) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">Edytuj</a>
+                            <a href="{{ route('admin.table.edit', [$tableName, $row->id]) }}" class="text-indigo-600 hover:text-indigo-900 mr-3" aria-label="Edytuj rekord ID {{ $row->id }}">Edytuj</a>
                             <form action="{{ route('admin.table.destroy', [$tableName, $row->id]) }}" method="POST" class="inline-block" onsubmit="return confirm('Czy na pewno usunąć?')">
                                 @csrf @method('DELETE')
-                                <button class="text-red-600 hover:text-red-900">Usuń</button>
+                                <button class="text-red-600 hover:text-red-900" aria-label="Usuń rekord ID {{ $row->id }}">Usuń</button>
                             </form>
                         </td>
                     </tr>

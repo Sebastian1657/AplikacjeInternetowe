@@ -15,7 +15,7 @@
         <h3 class="text-lg font-semibold mb-4">Dodaj nowy gatunek główny</h3>
         <form action="{{ route('supervisor.animals.species.store') }}" method="POST" class="flex gap-4">
             @csrf
-            <input type="text" name="name" placeholder="Nazwa gatunku (np. Kotowate)" class="flex-1 rounded-md border-gray-300 shadow-sm" required>
+            <input aria-label="Wpisz nazwę nowego gatunku" type="text" name="name" placeholder="Nazwa gatunku (np. Kotowate)" class="flex-1 rounded-md border-gray-300 shadow-sm" required>
             <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Dodaj</button>
         </form>
     </div>

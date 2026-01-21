@@ -82,8 +82,12 @@
                 @endphp
 
                 <div onclick="openModal(this)"
+                    onkeydown="if(event.key === 'Enter' || event.key === ' ') { openModal(this); event.preventDefault(); }"
+                    role="button"
+                    tabindex="0"
+                    aria-label="Wybieg: {{ $enclosure->name }}"
                     data-id="{{ $enclosure->id }}"
-                    class="absolute rounded-xl border-2 shadow-md cursor-pointer hover:scale-105 hover:shadow-xl hover:z-40 transition-transform duration-300 will-change-transform flex flex-col items-center justify-center p-1 text-center group {{ $colors }}"
+                    class="enclosure-card absolute rounded-xl border-2 shadow-md cursor-pointer hover:scale-105 hover:shadow-xl hover:z-40 transition-transform duration-300 will-change-transform flex flex-col items-center justify-center p-1 text-center group {{ $colors }}"
                     style="top: {{ $pos['t'] }}%; left: {{ $pos['l'] }}%; width: {{ $pos['w'] }}%; height: {{ $pos['h'] }}%;">
                     
                     <span class="font-bold text-xs md:text-sm lg:text-base leading-tight select-none">
@@ -94,6 +98,7 @@
                         @foreach($uniqueSpecies->take(3) as $animal)
                             <img src="{{ asset('photos/' . Str::slug($animal->subspecies->common_name, '_') . '.jpg') }}" 
                                 decoding="async"
+                                alt="Miniaturowe zdjęcie {{ $animal->subspecies->common_name }}"
                                 class="inline-block h-6 w-6 md:h-14 md:w-14 rounded-full ring-2 ring-white object-cover bg-white"
                                 title="{{ $animal->subspecies->common_name }}"
                                 onerror="this.onerror=null; this.src='https://placehold.co/100x100/e2e8f0/16a34a?text=?';">

@@ -15,3 +15,114 @@
     --color-zoo-footer: #052e16;
     --color-zoo-text: #1b1b18;
 }
+
+/* --- TRYB WYSOKIEGO KONTRASTU (Poprawiony) --- */
+.high-contrast {
+    /* Zmienne globalne */
+    --color-zoo-bg: #ffffff;
+    --color-zoo-menu: #000000;
+    --color-zoo-menu-hover: #333333;
+    --color-zoo-footer: #000000;
+    --color-zoo-text: #000000;
+}
+
+/* 1. Reset ogólny: Tła białe, tekst czarny */
+.high-contrast body,
+.high-contrast main,
+.high-contrast .bg-zoo-bg, 
+.high-contrast .bg-gray-50,
+.high-contrast .bg-white {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+
+/* 2. WYJĄTKI: Ciemne kontenery (Sidebar, Stopka, Header Menu) */
+.high-contrast aside,
+.high-contrast footer,
+.high-contrast header .bg-zoo-menu, 
+.high-contrast .bg-black {
+    background-color: #000000 !important;
+    color: #ffff00 !important; /* Żółty tekst na czarnym tle */
+    border: 2px solid #ffffff !important; /* Biała ramka dla kontrastu */
+}
+
+/* Teksty wewnątrz ciemnych kontenerów muszą być żółte lub białe */
+.high-contrast aside *,
+.high-contrast footer * {
+    color: #ffff00 !important;
+    border-color: #ffff00 !important;
+}
+
+.high-contrast aside a:hover {
+    background-color: #ffff00 !important;
+    color: #000000 !important;
+}
+
+/* 3. MAPA ZOO - Nadpisywanie kolorów */
+
+/* Tło mapy (trawa) -> Białe z czarną ramką */
+.high-contrast .bg-\[\#ecfccb\] {
+    background-color: #ffffff !important;
+    border: 2px solid #000000 !important;
+}
+
+/* Kafelki wybiegów (resetujemy bg-blue-500, bg-yellow-100 itp.) */
+.high-contrast .enclosure-card {
+    background-color: #ffffff !important; /* Białe tło */
+    border: 3px solid #000000 !important; /* Gruba czarna ramka */
+    color: #000000 !important;            /* Czarny tekst */
+    box-shadow: none !important;
+}
+
+.high-contrast svg path[fill="#93c5fd"] { fill: #000000 !important; opacity: 0.1; } /* Woda */
+.high-contrast svg path[stroke="#d6d3d1"] { stroke: #000000 !important; } /* Ścieżki */
+
+/* 4. Formularze i Inputy */
+.high-contrast input, 
+.high-contrast select, 
+.high-contrast textarea {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 2px solid #000000 !important;
+}
+
+/* 5. Szare teksty na jasnym tle -> zamień na czarne */
+.high-contrast main .text-gray-500,
+.high-contrast main .text-gray-600,
+.high-contrast main .text-gray-700 {
+    color: #000000 !important;
+}
+
+.high-contrast button {
+    border: 2px solid #000000 !important;
+}
+.high-contrast .bg-gray-100 {
+    background-color: #ffffff !important;
+    border: 2px solid #000000 !important;
+}
+
+.high-contrast .stats-container {
+    background-color: #000000 !important;
+    border-top: 2px solid #ffffff !important;
+}
+
+.high-contrast .stats-container span {
+    color: #ffff00 !important;
+}
+
+/* Przyciski w sekcji Hero - muszą mieć czarne tło i żółtą ramkę */
+.high-contrast .hero-section a {
+    background-color: #000000 !important;
+    border: 2px solid #ffff00 !important;
+    color: #ffff00 !important;
+}
+
+/* Hover na przyciskach - odwrócenie kolorów */
+.high-contrast .hero-section a:hover {
+    background-color: #ffff00 !important;
+    color: #000000 !important;
+}
+
+.high-contrast video {
+    opacity: 0.25;
+}
