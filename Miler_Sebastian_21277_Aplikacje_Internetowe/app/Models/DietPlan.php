@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Interfaces\Adminable;
 
 class DietPlan extends Model
 {
@@ -20,5 +21,16 @@ class DietPlan extends Model
         return $this->belongsToMany(Food::class, 'diet_food')
                     ->withPivot('amount')
                     ->withTimestamps();
+    }
+
+    public static function getAdminConfig(): array
+    {
+        return [
+            'title' => 'Plany Żywieniowe',
+            'fields' => [
+                'name' => ['label' => 'Nazwa Diety', 'type' => 'text'],
+                'feeding_frequency' => ['label' => 'Częstotliwość', 'type' => 'text'],
+            ]
+        ];
     }
 }

@@ -6,8 +6,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Interfaces\Adminable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements Adminable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
@@ -80,5 +81,23 @@ class User extends Authenticatable
     public function isAdministrator()
     {
         return $this->hasRole('admin'); 
+    }
+
+    public static function getAdminConfig(): array
+    {
+        return [
+            'title' => 'Użytkownicy',
+            'fields' => [
+                'name' => ['label' => 'Imię', 'type' => 'text'],
+                'last_name' => ['label' => 'Nazwisko', 'type' => 'text'],
+                'email' => ['label' => 'Email', 'type' => 'email'],
+                'role_id' => [
+                    'label' => 'Rola', 
+                    'type' => 'relation', 
+                    'model' => \App\Models\Role::class, 
+                    'display' => 'display_name'
+                ],
+            ]
+        ];
     }
 }

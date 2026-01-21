@@ -8,6 +8,9 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\DietController;
+use App\Http\Controllers\AnimalManagementController;
+use App\Http\Controllers\AdminController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -37,8 +40,10 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['can:is-manager'])->group(function () {
         Route::get('/zarzadzanie-grafikiem', [ScheduleController::class, 'managerIndex'])
         ->name('schedule.manager');
+
         Route::get('/api/schedule/day/{date}', [ScheduleController::class, 'getDayData'])
         ->name('api.schedule.day');
+
         Route::post('/api/schedule/save', [ScheduleController::class, 'saveDayData'])
         ->name('api.schedule.save');
     });
@@ -47,6 +52,46 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('pracownicy', EmployeeController::class)
             ->names('employees')
             ->parameters(['pracownicy' => 'employee']);
+        
+        Route::resource('diety', DietController::class)
+        ->names('diets')
+        ->parameters(['diety' => 'diet']);
+
+        Route::get('diety/{diet}/przypisz', [DietController::class, 'assignForm'])
+        ->name('diets.assign');
+
+        Route::post('diety/{diet}/przypisz', [DietController::class, 'processAssign'])
+        ->name('diets.process_assign');
+
+        Route::controller(AnimalManagementController::class)
+        ->prefix('zwierzeta')
+        ->name('animals.')
+        ->group(function () {
+            Route::get('/', 'index')->name('index');
             
+            Route::post('/gatunek', 'storeSpecies')->name('species.store');
+            Route::delete('/gatunek/{species}', 'destroySpecies')->name('species.destroy');
+
+            Route::get('/podgatunek/dodaj/{species}', 'createSubspecies')->name('subspecies.create');
+            Route::post('/podgatunek', 'storeSubspecies')->name('subspecies.store');
+            Route::delete('/podgatunek/{subspecies}', 'destroySubspecies')->name('subspecies.destroy');
+
+            Route::get('/zwierze/dodaj/{subspecies}', 'createAnimal')->name('create');
+            Route::post('/zwierze', 'storeAnimal')->name('store');
+            Route::delete('/zwierze/{animal}', 'destroyAnimal')->name('destroy');
+        });
+    });
+
+    Route::middleware(['can:is-administrator'])->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/', function () {
+            return redirect()->route('admin.table.index', 'users'); 
+        })->name('dashboard');
+
+        Route::get('/tabela/{tableName}', [AdminController::class, 'index'])->name('table.index');
+        Route::get('/tabela/{tableName}/dodaj', [AdminController::class, 'create'])->name('table.create');
+        Route::post('/tabela/{tableName}', [AdminController::class, 'store'])->name('table.store');
+        Route::get('/tabela/{tableName}/{id}/edytuj', [AdminController::class, 'edit'])->name('table.edit');
+        Route::put('/tabela/{tableName}/{id}', [AdminController::class, 'update'])->name('table.update');
+        Route::delete('/tabela/{tableName}/{id}', [AdminController::class, 'destroy'])->name('table.destroy');
     });
 });

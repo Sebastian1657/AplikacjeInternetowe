@@ -188,9 +188,9 @@ class DatabaseSeeder extends Seeder
                 'name' => $config['name'],
                 'feeding_frequency' => $config['frequency']
             ]);
-            foreach ($config['ingredients'] as $foodName => $amount) {
-                if(isset($foods[$foodName])) {
-                    $diet->foods()->attach($foods[$foodName]->id, ['amount' => $amount]);
+            foreach ($config['ingredients'] as $foodId => $amount) {
+                if(isset($foodId)) {
+                    $diet->foods()->attach($foodId, ['amount' => $amount]);
                 }
             }
             $dietModels[$key] = $diet;
