@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('cares', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('animal_id')->constrained()->onDelete('cascade');
+            $table->foreignId('subspecies_id')->constrained()->onDelete('cascade');
             $table->date('care_date');
             $table->unsignedTinyInteger('shift');
             $table->timestamps();

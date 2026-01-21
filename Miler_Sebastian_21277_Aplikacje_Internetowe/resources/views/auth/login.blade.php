@@ -33,9 +33,17 @@
                 <p class="text-gray-500 mt-2">Zaloguj się, aby uzyskać dostęp.</p>
             </div>
 
-            <form action="#" method="POST" class="space-y-6">
+            <form action="{{ route('login.authenticate') }}" method="POST" class="space-y-6">
                 @csrf
-                
+                @if ($errors->any())
+                    <div class="bg-red-50 text-red-600 p-4 rounded-lg text-sm border border-red-200">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Adres Email</label>
                     <div class="relative">

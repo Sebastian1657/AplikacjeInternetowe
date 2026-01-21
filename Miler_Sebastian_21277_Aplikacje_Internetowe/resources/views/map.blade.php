@@ -3,24 +3,24 @@
 @section('content')
 @php
     $mapPositions = [
-        'Sawanna Słoni' =>          ['t' => 5,  'l' => 2,  'w' => 25, 'h' => 25],
-        'Wybieg żyraf' =>           ['t' => 5,  'l' => 30, 'w' => 20, 'h' => 25],
-        'Bambusowy Las' =>          ['t' => 5,  'l' => 58, 'w' => 20, 'h' => 20],
-        'Wybieg niedźwiedzi' =>     ['t' => 5,  'l' => 80, 'w' => 18, 'h' => 20],
+        'Sawanna Słoni' =>              ['t' => 5,  'l' => 2,  'w' => 25, 'h' => 25],
+        'Wybieg żyraf' =>               ['t' => 5,  'l' => 30, 'w' => 20, 'h' => 25],
+        'Bambusowy Las' =>              ['t' => 5,  'l' => 58, 'w' => 20, 'h' => 20],
+        'Wybieg niedźwiedzi' =>         ['t' => 5,  'l' => 80, 'w' => 18, 'h' => 20],
 
-        'Basen Fok' =>              ['t' => 37, 'l' => 25, 'w' => 18, 'h' => 23],
-        'Zatoka Nerp' =>            ['t' => 37, 'l' => 47, 'w' => 24, 'h' => 14],
+        'Basen Fok' =>                  ['t' => 37, 'l' => 25, 'w' => 18, 'h' => 23],
+        'Zatoka Nerp' =>                ['t' => 37, 'l' => 47, 'w' => 24, 'h' => 14],
         
-        'Wybieg lodowy' =>          ['t' => 30, 'l' => 75, 'w' => 20, 'h' => 18],
-        'Oceanarium ryb drapieżnych'=> ['t' => 52, 'l' => 75, 'w' => 20, 'h' => 15],
-        'Rafa Koralowa' =>          ['t' => 70, 'l' => 80, 'w' => 16, 'h' => 25],
+        'Wybieg lodowy' =>              ['t' => 30, 'l' => 75, 'w' => 20, 'h' => 18],
+        'Oceanarium ryb drapieżnych'=>  ['t' => 52, 'l' => 75, 'w' => 20, 'h' => 15],
+        'Rafa Koralowa' =>              ['t' => 70, 'l' => 80, 'w' => 16, 'h' => 25],
 
-        'Małpi Gaj' =>              ['t' => 35, 'l' => 2,  'w' => 18, 'h' => 30],
-        'Pustynia' =>               ['t' => 70, 'l' => 2,  'w' => 13, 'h' => 28],
+        'Małpi Gaj' =>                  ['t' => 35, 'l' => 2,  'w' => 18, 'h' => 30],
+        'Pustynia' =>                   ['t' => 70, 'l' => 2,  'w' => 13, 'h' => 28],
 
-        'Papugarnia' =>             ['t' => 75, 'l' => 20, 'w' => 18, 'h' => 20],
-        'Dżungla Tukanów' =>        ['t' => 56, 'l' => 46, 'w' => 24, 'h' => 14],
-        'Gołębnik Egzotyczny' =>    ['t' => 74, 'l' => 60, 'w' => 15, 'h' => 22],
+        'Papugarnia' =>                 ['t' => 75, 'l' => 20, 'w' => 18, 'h' => 20],
+        'Dżungla Tukanów' =>            ['t' => 56, 'l' => 46, 'w' => 24, 'h' => 14],
+        'Gołębnik Egzotyczny' =>        ['t' => 74, 'l' => 60, 'w' => 15, 'h' => 22],
     ];
 @endphp
 

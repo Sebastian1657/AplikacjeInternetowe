@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\User;
-use App\Models\Animal;
+use App\Models\Subspecies;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -22,7 +22,7 @@ class CareFactory extends Factory
             'care_date' => $this->faker->dateTimeBetween('-1 month', '+1 month')->format('Y-m-d'),
             'shift' => $this->faker->randomElement([1, 2, 3]),
             'user_id' => User::factory(),
-            'animal_id' => Animal::factory(),
+            'subspecies_id' => Subspecies::inRandomOrder()->first()->id ?? 1,
         ];
     }
 }

@@ -11,6 +11,7 @@ use App\Models\Food;
 use App\Models\DietPlan;
 use App\Models\Animal;
 use App\Models\Care;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -330,12 +331,28 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         }
-        
-        $allAnimals = Animal::all();
-        
-        Care::factory(60)->create([
-            'user_id' => $employees->random()->id,
-            'animal_id' => $allAnimals->random()->id,
-        ]);
+
+        $employeeRole = Role::where('name', 'employee')->first();
+        $employees = User::where('role_id', $employeeRole->id)->get();
+        $allSubspecies = Subspecies::all();
+
+        if($employees->count() > 0 && $allSubspecies->count() > 0) {
+            for ($i = 0; $i < 7; $i++) {
+                $date = Carbon::now()->addDays($i);
+                
+                foreach ($allSubspecies as $species) {
+                    $shiftsToCover = collect([1, 2, 3])->random(rand(1, 3));
+
+                    foreach ($shiftsToCover as $shift) {
+                        Care::factory()->create([
+                            'user_id' => $employees->random()->id,
+                            'subspecies_id' => $species->id,
+                            'care_date' => $date,
+                            'shift' => $shift
+                        ]);
+                    }
+                }
+            }
+        }
     }
 }

@@ -19,4 +19,8 @@ class Subspecies extends Model
         return $this->hasMany(Animal::class);
     }
 
+    public function cares()
+    {
+        return $this->hasMany(Care::class);
+    }
 }

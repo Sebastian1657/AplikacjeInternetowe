@@ -22,7 +22,9 @@
             </button>
             
             <div class="text-2xl font-bold tracking-wider text-zoo-menu">
-                🦁 ZOO <span class="text-gray-400 text-sm font-normal">System</span>
+                <a href="/">
+                    🦁 ZOO <span class="text-gray-400 text-sm font-normal">System</span>
+                </a>
             </div>
         </div>
 
@@ -66,6 +68,28 @@
                 Nasi Mieszkańcy
             </a>
 
+            @auth
+                @can('is-employee')
+                <a href="{{ route('schedule.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-green-100 transition-colors group {{ request()->routeIs('schedule.*') ? 'bg-green-700/50 text-white' : '' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 group-hover:scale-110 transition-transform">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                    </svg>
+                    Mój Grafik
+                </a>
+                @endcan
+                
+                @can('is-manager')
+                <a href="{{ route('schedule.manager') }}" class="flex items-center gap-3 px-4 py-3 hover:bg-green-600/50 rounded-lg text-green-100 transition-colors group {{ request()->routeIs('schedule.manager') ? 'bg-green-700/50 text-white' : '' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 group-hover:scale-110 transition-transform">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
+                    </svg>
+                    Zarządzanie Grafikami
+                </a>
+                @endcan
+                
+                <div class="border-t border-green-600/30 my-2 mx-4"></div>
+            @endauth
+
             <a href="{{ route('contact') }}" class="flex items-center gap-3 px-4 py-3 hover:bg-green-600/50 rounded-lg text-green-100 transition-colors group {{ request()->routeIs('contact') ? 'bg-green-700/50 text-white' : '' }}">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 group-hover:scale-110 transition-transform">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
@@ -73,6 +97,31 @@
                 Kontakt
             </a>
         </nav>
+        <div class="p-4 border-t border-green-600/50 bg-green-800/30">
+            @auth
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white font-bold tracking-widest border border-green-400/30 shadow-sm">
+                        {{ substr(Auth::user()->name, 0, 1) }}{{ substr(Auth::user()->last_name ?? '', 0, 1) }}
+                    </div>
+                    
+                    <div class="flex flex-col overflow-hidden">
+                        <span class="text-sm font-semibold truncate text-white" title="{{ Auth::user()->name }} {{ Auth::user()->last_name }}">
+                            {{ Auth::user()->name }} {{ Auth::user()->last_name }}
+                        </span>
+                        
+                        <form action="{{ route('logout') }}" method="POST" class="inline">
+                            @csrf
+                            <button type="submit" class="text-xs text-green-200 hover:text-white transition-colors flex items-center gap-1 mt-0.5 cursor-pointer">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-3">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l-3 3m0 0 3 3m-3-3h12.75" />
+                                </svg>
+                                Wyloguj
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            @endauth
+        </div>
     </aside>
 
     <main class="grow w-full">
