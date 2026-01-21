@@ -7,6 +7,7 @@ use App\Http\Controllers\MapController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\EmployeeController;
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -32,6 +33,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['can:is-employee'])->group(function () {
         Route::get('/grafik', [ScheduleController::class, 'index'])->name('schedule.index');
     });
+
     Route::middleware(['can:is-manager'])->group(function () {
         Route::get('/zarzadzanie-grafikiem', [ScheduleController::class, 'managerIndex'])
         ->name('schedule.manager');
@@ -39,5 +41,12 @@ Route::middleware(['auth'])->group(function () {
         ->name('api.schedule.day');
         Route::post('/api/schedule/save', [ScheduleController::class, 'saveDayData'])
         ->name('api.schedule.save');
+    });
+
+    Route::middleware(['can:is-supervisor'])->prefix('kierownik')->name('supervisor.')->group(function () {
+        Route::resource('pracownicy', EmployeeController::class)
+            ->names('employees')
+            ->parameters(['pracownicy' => 'employee']);
+            
     });
 });
