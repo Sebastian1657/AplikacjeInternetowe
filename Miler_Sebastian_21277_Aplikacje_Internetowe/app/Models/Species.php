@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Interfaces\Adminable;
 
-class Species extends Model
+class Species extends Model implements Adminable
 {
     
     protected $table = 'species';
@@ -18,5 +19,14 @@ class Species extends Model
     public function specializedUsers()
     {
         return $this->belongsToMany(User::class, 'specializations');
+    }
+    public static function getAdminConfig(): array
+    {
+        return [
+            'title' => 'Gatunki',
+            'fields' => [
+                'name' => ['label' => 'Nazwa Gatunku', 'type' => 'text'],
+            ]
+        ];
     }
 }

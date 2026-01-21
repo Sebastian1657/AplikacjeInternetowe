@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Interfaces\Adminable;
 
-class Enclosure extends Model
+class Enclosure extends Model implements Adminable
 {
     
     protected $table = 'enclosures';
@@ -18,5 +19,17 @@ class Enclosure extends Model
     public function isFull()
     {
         return $this->animals()->count() >= $this->capacity;
+    }
+
+    public static function getAdminConfig(): array
+    {
+        return [
+            'title' => 'Wybiegi',
+            'fields' => [
+                'name' => ['label' => 'Nazwa Wybiegu', 'type' => 'text'],
+                'type' => ['label' => 'Typ (kod)', 'type' => 'text'], // Np. open_air
+                'capacity' => ['label' => 'Pojemność', 'type' => 'number'],
+            ]
+        ];
     }
 }
