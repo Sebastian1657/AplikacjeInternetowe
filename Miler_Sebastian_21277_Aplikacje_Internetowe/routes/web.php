@@ -31,3 +31,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::middleware(['auth'])->group(function () {
     Route::get('/grafik', [ScheduleController::class, 'index'])->name('schedule.index');
 });
+Route::get('/zarzadzanie-grafikiem', [ScheduleController::class, 'managerIndex'])
+    ->name('schedule.manager');
+Route::get('/api/schedule/day/{date}', [ScheduleController::class, 'getDayData'])->name('api.schedule.day');
+Route::post('/api/schedule/save', [ScheduleController::class, 'saveDayData'])->name('api.schedule.save');

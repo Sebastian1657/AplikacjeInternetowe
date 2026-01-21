@@ -332,28 +332,25 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        $caretakerRole = Role::where('name', 'employee')->first();
-        $caretakers = User::where('role_id', $caretakerRole->id)->get();
+        $employeeRole = Role::where('name', 'employee')->first();
+        $employees = User::where('role_id', $employeeRole->id)->get();
         $allSubspecies = Subspecies::all();
 
-        if($caretakers->count() > 0 && $allSubspecies->count() > 0) {
+        if($employees->count() > 0 && $allSubspecies->count() > 0) {
             for ($i = 0; $i < 7; $i++) {
                 $date = Carbon::now()->addDays($i);
                 
                 foreach ($allSubspecies as $species) {
-                    Care::factory()->create([
-                        'user_id' => $caretakers->random()->id,
-                        'subspecies_id' => $species->id,
-                        'care_date' => $date,
-                        'shift' => '1'
-                    ]);
+                    $shiftsToCover = collect([1, 2, 3])->random(rand(1, 3));
 
-                    Care::factory()->create([
-                        'user_id' => $caretakers->random()->id,
-                        'subspecies_id' => $species->id,
-                        'care_date' => $date,
-                        'shift' => '2'
-                    ]);
+                    foreach ($shiftsToCover as $shift) {
+                        Care::factory()->create([
+                            'user_id' => $employees->random()->id,
+                            'subspecies_id' => $species->id,
+                            'care_date' => $date,
+                            'shift' => $shift
+                        ]);
+                    }
                 }
             }
         }

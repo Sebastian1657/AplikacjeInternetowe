@@ -16,4 +16,7 @@ class Care extends Model
     public function subspecies() {
         return $this->belongsTo(Subspecies::class);
     }
+    protected $casts = [
+        'care_date' => 'date',
+    ];
 }
