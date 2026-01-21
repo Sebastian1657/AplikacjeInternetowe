@@ -58,15 +58,27 @@ class User extends Authenticatable
     public function cares() {
         return $this->hasMany(Care::class);
     }
-    public function hasRole($roleName)
+    public function hasRole(string $roleName)
     {
-        return $this->role?->name === $roleName;
+        return $this->role && $this->role->name === $roleName;
     }
     public function todaySchedule() {
         return $this->cares()->where('care_date', now()->toDateString());
     }
     public function isEmployee()
     {
-        return $this->role_id !== null; 
+        return $this->hasRole('employee'); 
+    }
+    public function isManager()
+    {
+        return $this->hasRole('manager'); 
+    }
+    public function isSupervisor()
+    {
+        return $this->hasRole('supervisor'); 
+    }
+    public function isAdministrator()
+    {
+        return $this->hasRole('admin'); 
     }
 }
