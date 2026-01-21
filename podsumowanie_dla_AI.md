@@ -1,111 +1,120 @@
 # 🦁 Projekt: System Zarządzania ZOO (Laravel)
 
-**Data ostatniej aktualizacji:** 17.01.2026
+**Data ostatniej aktualizacji:** 21.01.2026
 **Repozytorium:** `sebastian1657/aplikacjeinternetowe`
-**Branch:** `main` (folder: `Miler_Sebastian_21277_Aplikacje_Internetowe`)
+**Status:** Development (Funkcjonalny MVP)
 
 ---
 
-## 1. Główne Założenia Projektowe
+## 1. Architektura i Główne Założenia
 
-System opiera się na zasadzie: **"Deterministyczna Struktura, Losowe Instancje"**.
-Oznacza to, że infrastruktura (wybiegi), biologia (gatunki) i zasady żywienia (diety) są stałe i logiczne, natomiast konkretne zwierzęta (imiona, wiek) oraz grafik pracy są generowane losowo.
+System realizuje koncepcję: **"Deterministyczna Struktura, Losowe Instancje"**.
+Infrastruktura (mapa), taksonomia (biologia) i dietetyka są stałe, natomiast populacja zwierząt i grafiki pracy są generowane dynamicznie.
 
 ### A. Hierarchia Biologiczna
-1.  **Species (Gatunek):** Nadrzędna kategoria (np. *Kotowate*, *Słoniowate*).
-2.  **Subspecies (Podgatunek):** Konkretny typ zwierzęcia (np. *Tygrys Syberyjski*, *Słoń Afrykański*).
-    * Posiada nazwę polską (`common_name`) i łacińską (`scientific_name`).
-3.  **Animal (Zwierzę):** Konkretny osobnik (np. samica "Berta", ur. 2015).
+1.  **Species (Gatunek):** Kategoria ogólna (np. *Niedźwiedziowate*, *Fokowate*).
+2.  **Subspecies (Podgatunek):** Konkretny typ zwierzęcia widoczny dla odwiedzających.
+    * Atrybuty: `common_name` (Polska nazwa), `scientific_name` (Łacina).
+    * Relacja: Przypisany do konkretnego gatunku.
+3.  **Animal (Zwierzę):** Instancja podgatunku.
+    * Generowane losowo przez Factory (imię, płeć, data urodzenia).
 
 ### B. Infrastruktura (Enclosures)
-Wybiegi są ściśle zdefiniowane i przypisane do konkretnych gatunków w `DatabaseSeeder`.
-Typy wybiegów (enum/string):
-* `open_air` (Słonie, Żyrafy, Niedźwiedzie, Pandy)
-* `indoor_cage` (Małpy, Surykatki)
-* `aviary` (Papugi, Tukany, Gołębie)
-* `aquarium` (Ryby, Rafa)
-* `pool_enclosure` (Foki, Nerpy)
-* `cooled_enclosure` (Pingwiny)
+Wybiegi są zdefiniowane "na sztywno" w Seederze. Każdy ma określoną pojemność (`capacity`) i typ.
+**Typy wybiegów:**
+* `open_air` (np. Sawanna Słoni, Wybieg Żyraf)
+* `indoor_cage` (np. Małpi Gaj, Pustynia)
+* `aviary` (np. Papugarnia, Dżungla Tukanów)
+* `aquarium` (np. Oceanarium, Rafa Koralowa)
+* `pool_enclosure` (np. Basen Fok, Zatoka Nerp)
+* `cooled_enclosure` (np. Wybieg lodowy - Pingwiny)
 
 ### C. System Żywienia (Strict Diet System)
-* **Food (Produkt):** Konkretny produkt (np. *Wołowina*, *Siano*) z przypisaną jednostką (`kg`, `szt`, `g`).
-* **DietPlan (Dieta):** Nazwany plan żywieniowy (np. *Dieta Mięsna - standard*).
-* **Relacja:** `DietPlan` <-> `Food` (Many-to-Many).
-* **Kluczowe:** Tabela łącząca `diet_food` zawiera kolumnę **`amount` (decimal 6,2)**, określającą dokładną ilość produktu w danej diecie.
+Model oparty na precyzyjnych dawkach pokarmowych.
+* **Food:** Produkty (np. *Wołowina, Siano, Bambus, Larwy mącznika*) z jednostkami (`kg`, `szt`, `g`).
+* **DietPlan:** Nazwane plany żywieniowe (np. *Dieta słoni*, *Dieta owadożerców*).
+* **Relacja `diet_food`:** Określa dokładną ilość (`amount`) danego produktu w diecie.
 
 ---
 
 ## 2. Struktura Bazy Danych i Modele
 
-### Kluczowe Modele i Wymagania
-1.  **`User`**:
-    * Pola: `name`, `last_name`, `email`, `password`, `role_id`.
-    * Wymaga: `role_id` i `last_name` w tablicy `$fillable`.
-2.  **`Animal`**:
-    * Relacje: `belongsTo` -> `DietPlan`, `Enclosure`, `Subspecies`.
-3.  **`Food`**:
-    * Tabela: `foods` (domyślna w Laravelu).
-    * **Uwaga:** Należy upewnić się, że model nie ma błędnego wpisu `protected $table = 'food';`.
-4.  **`Care`**:
-    * Grafik pracy.
-    * Wymaga: `use HasFactory;` w modelu, aby działał Seeder.
-    * Pola: `user_id`, `animal_id`, `care_date`, `shift` (int: 1, 2, 3).
-
-### Role (RBAC)
-Role są tworzone na sztywno z ID:
-1.  `admin`
-2.  `manager`
-3.  `supervisor` (Kierownik)
-4.  `employee` (Pracownik)
+### Kluczowe Encje
+1.  **`User` (Użytkownicy):**
+    * Role systemowe: `admin`, `manager`, `supervisor`, `employee`.
+    * **Nowość:** Relacja `specializations` (Many-to-Many z `Species`) – pozwala określić, w jakich gatunkach specjalizuje się pracownik.
+    * Helpery: `isEmployee()`, `isManager()`, `todaySchedule()`.
+2.  **`Care` (Grafik):**
+    * Przypisanie pracownika do **podgatunku** (`subspecies_id`) na konkretną datę i zmianę (1, 2, 3).
+3.  **`Ticket` (Logika w Kontrolerze):**
+    * System nie posiada tabeli biletów w bazie (staneless checkout), generuje PDF w locie.
+    * Typy biletów: Normalny, Ulgowy, Dziecko, Senior, Niepełnosprawny, Grupowy (>10 osób).
 
 ---
 
 ## 3. Strategia Seedowania (DatabaseSeeder.php)
 
-To serce projektu. Seeder działa w trybie "Create & Attach", a nie "Random Factory" dla struktur logicznych.
+Seeder buduje pełną strukturę ZOO od zera w następującej kolejności:
 
-**Kolejność wykonywania:**
-1.  **Role:** `firstOrCreate` (Admin, Manager, Supervisor, Employee).
-2.  **Użytkownicy:** Konta testowe na sztywno + 10 losowych pracowników.
-3.  **Jedzenie (`$foodList`):**
-    * Tworzone z tablicy asocjacyjnej (Nazwa => Jednostka).
-    * Obiekty zapisywane są do tablicy `$foods` w pamięci, aby później pobierać ich ID.
-4.  **Diety (`$dietsConfig`):**
-    * Tworzone `DietPlan`.
-    * Składniki przypisywane przez `attach()` z użyciem ID z tablicy `$foods`.
-    * Gotowe diety zapisywane do `$dietModels`.
-5.  **Mapa ZOO (`$zooMap`):**
-    * Pętla iterująca po konfiguracji ZOO.
-    * Tworzy: `Enclosure`, `Species`.
-    * Dla każdego podgatunku: tworzy `Subspecies` (z nazwą łacińską).
-    * **Generuje zwierzęta:** Używa `Animal::factory()` **tylko** do cech fizycznych (imię, płeć, wiek).
-    * **Przypisanie:** ID wybiegu, podgatunku i diety jest narzucane "na sztywno" z konfiguracji mapy.
-6.  **Grafik (Care):** Losowe przydzielenie pracowników do istniejących zwierząt.
-
----
-
-## 4. Stan Fabryk (Factories)
-
-* **`AnimalFactory.php`**: **CZYSTA.** Generuje tylko `name`, `sex`, `birth_date`. Nie może zawierać wywołań innych fabryk (np. `Subspecies::factory()`).
-* **`CareFactory.php`**: Generuje `care_date` i `shift`.
-* **`UserFactory.php`**: Standardowa, uwzględnia `last_name`.
-* **`FoodFactory.php`**: Istnieje pomocniczo.
-* **USUNIĘTE/NIEUŻYWANE:** `SpeciesFactory`, `SubspeciesFactory`, `EnclosureFactory`, `DietPlanFactory` (zastąpione logiką w Seederze).
+1.  **Role:** Tworzenie 4 sztywnych ról.
+2.  **Użytkownicy Kluczowi:**
+    * Admin Systemowy (`admin@zoo.pl`)
+    * Jan Manager (`manager@zoo.pl`)
+    * Krzysztof Kierownik (`kierownik@zoo.pl`)
+3.  **Personel:** Generowanie 10 losowych pracowników (Factory).
+4.  **Magazyn Żywności (`$foodList`):** Utworzenie 17 bazowych produktów (od mięsa po banany).
+5.  **Diety (`$diets`):**
+    * Zdefiniowanie 10 planów żywieniowych (np. `carnivore`, `bamboo`, `exotic_birds`).
+    * Przypisanie składników do diet z dokładnymi wagami.
+6.  **Mapa ZOO i Populacja (`$zooMap`):**
+    * Iteracja po konfiguracji wybiegów.
+    * Tworzenie `Enclosure`.
+    * Tworzenie/Pobieranie `Species`.
+    * Tworzenie `Subspecies` (z nazwą łacińską).
+    * **Zaludnianie:** Dla każdego podgatunku losowana jest liczba zwierząt (od 2 do `capacity` wybiegu) i przypisywana odpowiednia dieta.
+7.  **Grafik Pracy:**
+    * Generowanie grafiku na **7 dni do przodu**.
+    * Dla każdego gatunku system losuje liczbę zmian (1-3) do obsadzenia.
+    * Losowy pracownik jest przypisywany do dyżuru.
 
 ---
 
-## 5. Rozwiązane Problemy (Troubleshooting)
+## 4. Funkcjonalności Modułowe
 
-1.  **Błąd `no such table: food`**: Model `Food` próbował łączyć się z tabelą w liczbie pojedynczej. Poprawiono na domyślną konwencję Laravela (`foods`).
-2.  **Ilości jedzenia (Integer vs Decimal)**: Migracja `diet_food` została zaktualizowana, aby kolumna `amount` była typu `decimal(6,2)`. Pozwala to na podawanie ułamkowych wartości (np. 0.5 kg).
-3.  **Składnia Seedera**: Naprawiono błędy z "wiszącymi przecinkami" i błędnym odwoływaniem się do tablicy konfiguracyjnej zamiast do modeli Eloquent.
-4.  **Brak Traitów**: Dodano `HasFactory` do modelu `Care`.
+### A. Strefa Gościa (Publiczna)
+* **Interaktywna Mapa:**
+    * Frontend pobiera dane o wybiegach.
+    * Kliknięcie w wybieg ładuje modal (AJAX) ze zdjęciami i listą zwierząt.
+    * System ścieżek zdjęć: `photos/{slug_podgatunku}.jpg`.
+* **System Biletowy:**
+    * Wybór biletów i walidacja (np. minimum 10 osób dla grupy).
+    * Generowanie biletu w formacie PDF (`barryvdh/laravel-dompdf`).
+* **Mieszkańcy:** Lista podgatunków z paginacją i licznikiem osobników.
+
+### B. Panel Pracownika (`/grafik`)
+* Widok miesięczny kalendarza.
+* Podgląd swoich dyżurów.
+* Nawigacja między miesiącami.
+
+### C. Panel Managera (`/zarzadzanie-grafikiem`)
+* Widok tygodniowy z podziałem na pracowników.
+* Interfejs typu "Siatka" (Pracownik x Dzień Tygodnia).
+* **Edycja:** Możliwość przypisywania zmian i podgatunków (AJAX request do `saveDayData`).
+* Transakcyjne zapisywanie zmian w bazie danych.
+
+### D. Panel Supervisora (`/kierownik`)
+* Zarządzanie kadrami (CRUD Pracowników).
+* Blokada edycji/usuwania kont innych kierowników.
 
 ---
 
-## 6. Komendy Uruchomieniowe
+## 6. Do Zrobienia (ToDo)
+[x] Migracja bazy danych (SQLite -> MySQL/PostgreSQL w produkcji).
 
-Aby zresetować bazę i wgrać pełną strukturę ZOO:
+[x] Logika biletów PDF.
 
-```bash
-php artisan migrate:fresh --seed
+[x] Zarządzanie grafikiem (Manager).
+
+[ ] Implementacja panelu zarządzania specjalizacjami pracowników.
+
+[ ] Dostępność (Accessibility) - alty dla obrazków zwierząt.
