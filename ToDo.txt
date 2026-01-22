@@ -1,6 +1,0 @@
-- minimalna ilość tabel i relacji
-- zmiana na inny typ bazy danych (np. z sqllite na mysql)
-- różne uprawnienia dla różnych ról
-- ładny frontend, nie tylko crud, dużo funkcjonalności zewnętrznych
-- dla niepełnosprawnych: nie słyszący, nie widzący (koniecznie alty dla obrazków)
-- pushe do gita, testy jednostkowe
