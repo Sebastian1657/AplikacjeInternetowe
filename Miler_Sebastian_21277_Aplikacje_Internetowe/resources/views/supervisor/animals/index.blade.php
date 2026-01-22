@@ -12,7 +12,7 @@
     @endif
 
     <div class="bg-white p-6 rounded-lg shadow-md mb-8">
-        <h3 class="text-lg font-semibold mb-4">Dodaj nowy gatunek główny</h3>
+        <h2 class="text-lg font-semibold mb-4">Dodaj nowy gatunek główny</h2>
         <form action="{{ route('supervisor.animals.species.store') }}" method="POST" class="flex gap-4">
             @csrf
             <input aria-label="Wpisz nazwę nowego gatunku" type="text" name="name" placeholder="Nazwa gatunku (np. Kotowate)" class="flex-1 rounded-md border-gray-300 shadow-sm" required>
@@ -43,13 +43,13 @@
                 @forelse($specie->subspecies as $sub)
                     <details class="group bg-gray-50 rounded-md border border-gray-200">
                         <summary class="flex justify-between items-center p-4 cursor-pointer list-none">
-                            <div class="flex items-center gap-2">
+                            <span class="flex items-center gap-2">
                                 <span class="transition group-open:rotate-90">▶</span>
                                 <span class="font-semibold text-lg">{{ $sub->common_name }}</span>
                                 <span class="text-sm text-gray-500 italic">({{ $sub->scientific_name }})</span>
                                 <span class="text-xs bg-gray-200 px-2 py-0.5 rounded-full ml-2">{{ $sub->animals->count() }} os.</span>
-                            </div>
-                            <div class="flex gap-2">
+                            </span>
+                            <span class="flex gap-2">
                                 <a href="{{ route('supervisor.animals.create', $sub) }}" class="text-sm bg-green-100 text-green-700 px-3 py-1 rounded hover:bg-green-200">+ Zwierzę</a>
                                 @if($sub->animals->count() == 0)
                                 <form action="{{ route('supervisor.animals.subspecies.destroy', $sub) }}" method="POST" onsubmit="return confirm('Usunąć podgatunek?')">
@@ -57,7 +57,7 @@
                                     <button class="text-red-500 hover:text-red-700 text-sm px-2">Usuń</button>
                                 </form>
                                 @endif
-                            </div>
+                            </span>
                         </summary>
 
                         <div class="p-4 pt-0 border-t border-gray-100 pl-10">

@@ -31,7 +31,7 @@
         </div>
 
         <form action="{{ route('tickets.finalize') }}" method="POST">
-            @csrf
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
             
             <input type="hidden" name="email" value="{{ $data['email'] }}">
             <input type="hidden" name="visit_date" value="{{ $data['visit_date'] }}">

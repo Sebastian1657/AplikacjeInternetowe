@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="pl">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -62,7 +62,7 @@
     <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-zoo-menu text-white transform -translate-x-full transition-transform duration-300 ease-in-out shadow-2xl flex flex-col">
 
         <nav class="mt-16 flex-1 px-4 py-6 space-y-2">
-            <a href="{{ route('tickets.index') }}" class="flex items-center gap-3 px-4 py-3 hover:bg-green-600/50 rounded-lg text-green-100 transition-colors group {{ request()->routeIs('tickets.index') ? 'bg-green-700/50 text-white' : '' }}"}">
+            <a href="{{ route('tickets.index') }}" class="flex items-center gap-3 px-4 py-3 hover:bg-green-600/50 rounded-lg text-green-100 transition-colors group {{ request()->routeIs('tickets.index') ? 'bg-green-700/50 text-white' : '' }}">
                 <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 group-hover:scale-110 transition-transform">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v4.086c0 .705.328 1.374.887 1.81.559.435.887 1.105.887 1.81v4.086c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-4.086c0-.705.328-1.374.887-1.81.559-.435.887-1.105.887-1.81V6.375c0-.621-.504-1.125-1.125-1.125H3.375Z" />
                 </svg>
@@ -170,7 +170,7 @@
         </div>
     </aside>
 
-    <main id="main-content" class="grow w-full" focus:outline-none" tabindex="-1">
+    <main id="main-content" class="grow w-full focus:outline-none" tabindex="-1">
         @yield('content')
     </main>
 

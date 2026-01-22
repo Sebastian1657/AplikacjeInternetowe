@@ -30,7 +30,7 @@
         <img src="https://images.unsplash.com/photo-1546182990-dffeafbe841d?q=80&w=2059&auto=format&fit=crop" 
              alt="Zdjęcie przedstawiające lwa" 
              class="absolute inset-0 w-full h-full object-cover opacity-60">
-        <div class="absolute inset-0 bg-gradient-to-t from-zoo-footer/90 to-transparent"></div>
+        <div class="absolute inset-0 bg-linear-to-t from-zoo-footer/90 to-transparent"></div>
     </div>
 
     <div class="w-full lg:w-1/2 h-full flex items-center justify-center p-8 bg-zoo-bg/30 overflow-y-auto">
@@ -47,7 +47,7 @@
             </div>
 
             <form action="{{ route('login') }}" method="POST" class="space-y-6">
-                @csrf
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 @if ($errors->any())
                     <div class="bg-red-50 text-red-600 p-4 rounded-lg text-sm border border-red-200">
                         <ul>

@@ -16,6 +16,14 @@
     --color-zoo-text: #1b1b18;
 }
 
+body.loading { overflow: hidden; }
+
+@keyframes loading {
+    0% { left: -50%; }
+    50% { left: 100%; }
+    100% { left: -50%; }
+}
+
 /* --- TRYB WYSOKIEGO KONTRASTU (Poprawiony) --- */
 .high-contrast {
     /* Zmienne globalne */

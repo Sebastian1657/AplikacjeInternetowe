@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Blade;
 use App\Models\User;
 
 class AppServiceProvider extends ServiceProvider
@@ -32,6 +33,11 @@ class AppServiceProvider extends ServiceProvider
         });
         Gate::define('is-administrator', function (User $user) {
             return $user->isAdministrator();
+        });
+
+        // Nadpisanie dyrektywy @csrf dla zgodności z W3C
+        Blade::directive('csrf', function () {
+            return '<?php echo \'<input type="hidden" name="_token" value="\'.csrf_token().\'">\'; ?>';
         });
     }
 }

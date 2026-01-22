@@ -14,8 +14,7 @@
     <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden border border-green-100">
         
         <form action="{{ route('tickets.checkout') }}" method="POST" target="_blank" class="p-8 md:p-12">
-            @csrf
-
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
                 
                 <div>
@@ -39,7 +38,7 @@
                 </div>
             </div>
 
-            <h3 class="text-xl font-bold text-zoo-text mb-6 border-b border-gray-100 pb-2">Rodzaj i ilość biletów</h3>
+            <h2 class="text-xl font-bold text-zoo-text mb-6 border-b border-gray-100 pb-2">Rodzaj i ilość biletów</h2>
             
             <div class="overflow-x-auto mb-8">
                 <table class="w-full text-left border-collapse">

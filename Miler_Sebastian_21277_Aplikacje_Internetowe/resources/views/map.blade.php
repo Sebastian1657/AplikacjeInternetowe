@@ -41,20 +41,6 @@
         
         <div class="relative w-300 xl:w-full aspect-video bg-[#ecfccb]">
 
-            <div class="absolute inset-0 pointer-events-none opacity-60">
-                <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M30% 40% Q 50% 30% 70% 45% T 30% 40%" fill="#93c5fd" stroke="#60a5fa" stroke-width="2" />
-                    
-                    <path d="M50% 100% L 50% 80% Q 50% 50% 30% 50%" stroke="#d6d3d1" stroke-width="20" fill="none" stroke-linecap="round" />
-                    <path d="M50% 80% Q 50% 50% 70% 50%" stroke="#d6d3d1" stroke-width="20" fill="none" stroke-linecap="round" />
-                    
-                    <path d="M20% 50% L 20% 10% L 80% 10% L 80% 50%" stroke="#d6d3d1" stroke-width="12" fill="none" />
-                    
-                    <rect x="45%" y="95%" width="10%" height="5%" fill="#78350f" />
-                    <text x="50%" y="98%" font-size="14" font-weight="bold" fill="white" text-anchor="middle">WEJŚCIE</text>
-                </svg>
-            </div>
-
             @foreach($enclosures as $enclosure)
                 @php
                     $pos = $mapPositions[$enclosure->name] ?? ['t' => 80, 'l' => 45, 'w' => 10, 'h' => 10];
@@ -123,7 +109,7 @@
         <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
             <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
                 <div class="bg-zoo-menu px-6 py-4 flex justify-between items-center">
-                    <h3 class="text-xl font-bold text-white" id="modal-title">Nazwa Wybiegu</h3>
+                    <h2 class="text-xl font-bold text-white" id="modal-title">Nazwa Wybiegu</h2>
                     <button type="button" onclick="closeModal()" class="text-green-100 hover:text-white cursor-pointer" aria-label="Zamknij szczegóły">
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
