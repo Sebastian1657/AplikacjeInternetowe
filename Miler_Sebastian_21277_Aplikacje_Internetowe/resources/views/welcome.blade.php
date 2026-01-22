@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="relative w-full h-[calc(100vh-4rem)] overflow-hidden bg-black">
+<div class="hero-section relative w-full h-[calc(100vh-4rem)] overflow-hidden bg-black">
     
     <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-60">
         <source src="{{ asset('videos/' . $randomVideo) }}" type="video/mp4">
         Twoja przeglądarka nie obsługuje wideo.
     </video>
 
-    <div class="absolute inset-0 bg-linear-to-t from-zoo-footer/90 via-zoo-footer/20 to-transparent"></div>
+    <div class="hero-overlay absolute inset-0 bg-linear-to-t from-zoo-footer/90 via-zoo-footer/20 to-transparent"></div>
 
     <div class="relative z-10 h-full flex flex-col items-center justify-center text-center px-4">
         
@@ -20,16 +20,16 @@
         </p>
 
         <div class="mt-8 flex gap-4">
-            <a href="{{ route('tickets.index') }}" class="px-8 py-3 bg-zoo-menu hover:bg-green-500 text-white font-semibold rounded-full transition-all shadow-lg hover:scale-105">
+            <a href="{{ route('tickets.index') }}" aria-label="Kup bilet" class="px-8 py-3 bg-zoo-menu hover:bg-green-500 text-white font-semibold rounded-full transition-all shadow-lg hover:scale-105">
                 Kup Bilet
             </a>
-            <a href="{{ route('map') }}" class="px-8 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/30 font-semibold rounded-full transition-all hover:scale-105">
+            <a href="{{ route('map') }}" aria-label="Zobacz mapę" class="px-8 py-3 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border border-white/30 font-semibold rounded-full transition-all hover:scale-105">
                 Zobacz Mapę
             </a>
         </div>
     </div>
 
-    <div class="absolute bottom-0 left-0 right-0 z-20 border-t border-white/10 bg-white/5 backdrop-blur-lg">
+    <div class="stats-container absolute bottom-0 left-0 right-0 z-20 border-t border-white/10 bg-white/5 backdrop-blur-lg">
         <div class="container mx-auto px-6 py-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center text-white">
                 

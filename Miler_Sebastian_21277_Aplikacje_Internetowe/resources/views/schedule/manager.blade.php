@@ -10,7 +10,7 @@
         </div>
 
         <div class="flex items-center gap-4 mt-4 md:mt-0">
-            <a href="{{ route('schedule.manager', ['week' => $prevWeek]) }}" class="p-2 rounded-full hover:bg-green-50 text-zoo-text transition-colors border border-gray-200">
+            <a aria-label="Poprzedni Tydzień" href="{{ route('schedule.manager', ['week' => $prevWeek]) }}" class="p-2 rounded-full hover:bg-green-50 text-zoo-text transition-colors border border-gray-200">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
                 </svg>
@@ -23,7 +23,7 @@
                 </span>
             </div>
             
-            <a href="{{ route('schedule.manager', ['week' => $nextWeek]) }}" class="p-2 rounded-full hover:bg-green-50 text-zoo-text transition-colors border border-gray-200">
+            <a aria-label="Następny Tydzień" href="{{ route('schedule.manager', ['week' => $nextWeek]) }}" class="p-2 rounded-full hover:bg-green-50 text-zoo-text transition-colors border border-gray-200">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                 </svg>
@@ -131,12 +131,12 @@
                 
                 <div class="bg-zoo-footer px-6 py-4 flex justify-between items-center border-b border-green-800">
                     <div>
-                        <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                        <h2 class="text-xl font-bold text-white flex items-center gap-2">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6 text-zoo-menu">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                             </svg>
                             Edycja Grafiku: <span id="editorDateDisplay" class="ml-2 font-mono text-green-300">...</span>
-                        </h3>
+                        </h2>
                     </div>
                     
                     <div id="errorCounter" class="bg-red-500/20 text-red-200 px-3 py-1 rounded-full text-xs font-bold border border-red-500/50 hidden">

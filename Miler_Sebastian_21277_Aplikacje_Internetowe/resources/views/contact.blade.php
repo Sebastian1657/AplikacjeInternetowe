@@ -19,13 +19,13 @@
             <div class="bg-white p-8 rounded-2xl shadow-sm border border-green-100 relative overflow-hidden group hover:shadow-md transition-shadow">
                 <div class="absolute top-0 right-0 w-24 h-24 bg-zoo-menu/10 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110"></div>
                 
-                <h3 class="text-2xl font-bold text-zoo-menu mb-6 flex items-center gap-3">
+                <h2 class="text-2xl font-bold text-zoo-menu mb-6 flex items-center gap-3">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
                     </svg>
                     Adres ZOO
-                </h3>
+                </h2>
                 <address class="not-italic text-gray-600 text-lg leading-relaxed">
                     <strong>Wrocławski Ogród Zoologiczny</strong><br>
                     ul. Zygmunta Wróblewskiego 1-5<br>
@@ -69,7 +69,7 @@
 
         <div class="h-full min-h-100 bg-white p-2 rounded-2xl shadow-sm border border-green-100">
             <iframe 
-                src="https://maps.google.com/maps?width=600&amp;height=400&amp;hl=en&amp;q=Zoo wrocław&amp;t=&amp;z=15&amp;ie=UTF8&amp;iwloc=B&amp;output=embed" 
+                src="https://maps.google.com/maps?width=600&amp;height=400&amp;hl=en&amp;q=Zoo+wrocław&amp;t=&amp;z=15&amp;ie=UTF8&amp;iwloc=B&amp;output=embed" 
                 class="w-full h-full rounded-xl grayscale-20 hover:grayscale-0 transition-all duration-500" 
                 style="border:0;" 
                 allowfullscreen="" 

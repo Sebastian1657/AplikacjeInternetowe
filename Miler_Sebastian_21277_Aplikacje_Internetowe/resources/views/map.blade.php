@@ -41,20 +41,6 @@
         
         <div class="relative w-300 xl:w-full aspect-video bg-[#ecfccb]">
 
-            <div class="absolute inset-0 pointer-events-none opacity-60">
-                <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M30% 40% Q 50% 30% 70% 45% T 30% 40%" fill="#93c5fd" stroke="#60a5fa" stroke-width="2" />
-                    
-                    <path d="M50% 100% L 50% 80% Q 50% 50% 30% 50%" stroke="#d6d3d1" stroke-width="20" fill="none" stroke-linecap="round" />
-                    <path d="M50% 80% Q 50% 50% 70% 50%" stroke="#d6d3d1" stroke-width="20" fill="none" stroke-linecap="round" />
-                    
-                    <path d="M20% 50% L 20% 10% L 80% 10% L 80% 50%" stroke="#d6d3d1" stroke-width="12" fill="none" />
-                    
-                    <rect x="45%" y="95%" width="10%" height="5%" fill="#78350f" />
-                    <text x="50%" y="98%" font-size="14" font-weight="bold" fill="white" text-anchor="middle">WEJŚCIE</text>
-                </svg>
-            </div>
-
             @foreach($enclosures as $enclosure)
                 @php
                     $pos = $mapPositions[$enclosure->name] ?? ['t' => 80, 'l' => 45, 'w' => 10, 'h' => 10];
@@ -82,8 +68,12 @@
                 @endphp
 
                 <div onclick="openModal(this)"
+                    onkeydown="if(event.key === 'Enter' || event.key === ' ') { openModal(this); event.preventDefault(); }"
+                    role="button"
+                    tabindex="0"
+                    aria-label="Wybieg: {{ $enclosure->name }}"
                     data-id="{{ $enclosure->id }}"
-                    class="absolute rounded-xl border-2 shadow-md cursor-pointer hover:scale-105 hover:shadow-xl hover:z-40 transition-transform duration-300 will-change-transform flex flex-col items-center justify-center p-1 text-center group {{ $colors }}"
+                    class="enclosure-card absolute rounded-xl border-2 shadow-md cursor-pointer hover:scale-105 hover:shadow-xl hover:z-40 transition-transform duration-300 will-change-transform flex flex-col items-center justify-center p-1 text-center group {{ $colors }}"
                     style="top: {{ $pos['t'] }}%; left: {{ $pos['l'] }}%; width: {{ $pos['w'] }}%; height: {{ $pos['h'] }}%;">
                     
                     <span class="font-bold text-xs md:text-sm lg:text-base leading-tight select-none">
@@ -94,6 +84,7 @@
                         @foreach($uniqueSpecies->take(3) as $animal)
                             <img src="{{ asset('photos/' . Str::slug($animal->subspecies->common_name, '_') . '.jpg') }}" 
                                 decoding="async"
+                                alt="Miniaturowe zdjęcie {{ $animal->subspecies->common_name }}"
                                 class="inline-block h-6 w-6 md:h-14 md:w-14 rounded-full ring-2 ring-white object-cover bg-white"
                                 title="{{ $animal->subspecies->common_name }}"
                                 onerror="this.onerror=null; this.src='https://placehold.co/100x100/e2e8f0/16a34a?text=?';">
@@ -118,7 +109,7 @@
         <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
             <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
                 <div class="bg-zoo-menu px-6 py-4 flex justify-between items-center">
-                    <h3 class="text-xl font-bold text-white" id="modal-title">Nazwa Wybiegu</h3>
+                    <h2 class="text-xl font-bold text-white" id="modal-title">Nazwa Wybiegu</h2>
                     <button type="button" onclick="closeModal()" class="text-green-100 hover:text-white cursor-pointer" aria-label="Zamknij szczegóły">
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>

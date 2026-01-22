@@ -16,16 +16,6 @@
     </p>
 </div>
 
-<style>
-    body.loading { overflow: hidden; }
-    
-    @keyframes loading {
-        0% { left: -50%; }
-        50% { left: 100%; }
-        100% { left: -50%; }
-    }
-</style>
-
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.add('loading');

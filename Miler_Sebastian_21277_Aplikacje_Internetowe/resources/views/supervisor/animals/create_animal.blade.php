@@ -7,6 +7,7 @@
     <div class="bg-white p-6 rounded-lg shadow-md">
         <form action="{{ route('supervisor.animals.store') }}" method="POST">
             @csrf
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <input type="hidden" name="subspecies_id" value="{{ $subspecies->id }}">
 
             <div class="grid grid-cols-2 gap-4 mb-4">
@@ -17,6 +18,7 @@
                 <div>
                     <label class="block text-gray-700 text-sm font-bold mb-2">Płeć</label>
                     <select name="sex" class="w-full rounded-md border-gray-300 shadow-sm">
+                        <option value="" disabled selected>Wybierz płeć</option>
                         <option value="Samiec">Samiec</option>
                         <option value="Samica">Samica</option>
                         <option value="Nieznana">Nieznana</option>
@@ -32,6 +34,7 @@
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2">Przypisz do wybiegu</label>
                 <select name="enclosure_id" class="w-full rounded-md border-gray-300 shadow-sm" required>
+                    <option value="" disabled selected>Wybierz wybieg</option>
                     @foreach($enclosures as $enc)
                         <option value="{{ $enc->id }}">{{ $enc->name }} ({{ $enc->type }})</option>
                     @endforeach
@@ -41,6 +44,7 @@
             <div class="mb-6">
                 <label class="block text-gray-700 text-sm font-bold mb-2">Przypisz dietę</label>
                 <select name="diet_plan_id" class="w-full rounded-md border-gray-300 shadow-sm" required>
+                    <option value="" disabled selected>Wybierz dietę</option>
                     @foreach($diets as $diet)
                         <option value="{{ $diet->id }}">{{ $diet->name }}</option>
                     @endforeach

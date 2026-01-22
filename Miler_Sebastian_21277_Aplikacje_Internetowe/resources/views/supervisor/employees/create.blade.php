@@ -31,6 +31,7 @@
             <div>
                 <label for="role_id" class="block text-sm font-medium text-gray-700 mb-1">Stanowisko</label>
                 <select name="role_id" id="role_id" required class="w-full rounded-lg border-gray-300 focus:border-green-500 focus:ring-green-500 shadow-sm">
+                    <option value="" disabled selected>Wybierz stanowisko</option>
                     @foreach($roles as $role)
                         <option value="{{ $role->id }}">{{ ucfirst($role->name) }}</option>
                     @endforeach

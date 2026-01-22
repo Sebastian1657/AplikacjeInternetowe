@@ -26,7 +26,7 @@
 
             <hr class="my-6">
 
-            <h3 class="text-lg font-medium text-gray-900 mb-4">Składniki i proporcje</h3>
+            <h2 class="text-lg font-medium text-gray-900 mb-4">Składniki i proporcje</h2>
             
             <div id="ingredients-container">
                 @php

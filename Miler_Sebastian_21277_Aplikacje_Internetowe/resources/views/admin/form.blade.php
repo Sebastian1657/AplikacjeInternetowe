@@ -13,11 +13,10 @@
         </h1>
 
         <form action="{{ isset($item) ? route('admin.table.update', [$tableName, $item->id]) : route('admin.table.store', $tableName) }}" method="POST">
-            @csrf
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
             @if(isset($item)) @method('PUT') @endif
 
             <div class="space-y-4">
-                {{-- ITERACJA PO POLACH Z MODELU --}}
                 @foreach($config['fields'] as $field => $options)
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">
@@ -25,12 +24,10 @@
                         </label>
 
                         @if($options['type'] === 'relation')
-                            {{-- SELECT DLA RELACJI --}}
                             <select name="{{ $field }}" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                                 <option value="">-- Wybierz --</option>
                                 @php 
                                     $displayField = $options['display'];
-                                    // Pobieramy listę opcji z przekazanych danych
                                     $relatedItems = $relationsData[$field] ?? [];
                                     $currentValue = isset($item) ? $item->$field : old($field);
                                 @endphp
@@ -43,11 +40,9 @@
                             </select>
 
                         @elseif($options['type'] === 'date')
-                             {{-- DATA --}}
                              <input type="date" name="{{ $field }}" value="{{ isset($item) ? $item->$field : old($field) }}" class="w-full rounded-md border-gray-300 shadow-sm">
                         
                         @else
-                            {{-- ZWYKŁY TEKST --}}
                             <input type="text" name="{{ $field }}" value="{{ isset($item) ? $item->$field : old($field) }}" class="w-full rounded-md border-gray-300 shadow-sm">
                         @endif
                         
